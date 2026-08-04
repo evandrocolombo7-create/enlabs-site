@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evandro Colombo — Artista Archviz | Arquiteto</title>
+<meta name="description" content="Portfólio de Evandro Colombo, arquiteto e artista 3D atuando entre projeto e visualização arquitetônica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&display=swap">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;padding:0;background:#0A0A0A;overflow-x:hidden;}
+  a{color:inherit;text-decoration:none;}
+
+  #home{
+    font-family:'Jost','Century Gothic',-apple-system,'Segoe UI',sans-serif;
+    background:#0A0A0A;color:#FAFAFA;width:100%;
+  }
+
+  /* ---------- nav ---------- */
+  .ec-nav{
+    position:fixed;top:0;left:0;width:100%;z-index:20;
+    display:flex;justify-content:center;gap:clamp(20px,4vw,48px);
+    padding:22px clamp(24px,6vw,96px);
+  }
+  .ec-nav a{
+    font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#D8D8D8;
+    padding-bottom:6px;border-bottom:1px solid transparent;
+    transition:color .3s ease,border-color .3s ease;
+  }
+  .ec-nav a:hover{color:#FAFAFA;border-bottom-color:#FAFAFA;}
+
+  /* ---------- scroll stage ---------- */
+  .ec-stage{position:relative;height:520vh;}
+  .ec-anchor{position:absolute;height:1px;width:1px;}
+  #sobre{top:200vh;}
+  #contato{top:400vh;}
+  .ec-sticky{position:sticky;top:0;height:100vh;overflow:hidden;}
+
+  /* ---------- hero ---------- */
+  .ec-hero{position:absolute;inset:0;}
+  .ec-slide{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:saturate(0.35) contrast(1.02);
+    opacity:0;transition:opacity 1.4s ease;
+  }
+  .ec-slide.is-active{opacity:1;}
+  .ec-hero-scrim{position:absolute;inset:0;background:rgba(10,10,10,0.62);}
+
+  .ec-logo-layer{
+    position:absolute;inset:0;z-index:2;
+    display:flex;align-items:center;justify-content:center;pointer-events:none;
+  }
+  .ec-logo-row{display:flex;align-items:center;gap:clamp(20px,3vw,40px);}
+  .ec-logo-block{text-align:center;}
+  .ec-logo{
+    margin:0;font-family:inherit;font-weight:400;
+    font-size:clamp(36px,7vw,88px);letter-spacing:0;color:#FAFAFA;text-align:center;
+  }
+  .ec-tagline{
+    margin:14px 0 0;font-weight:300;font-size:clamp(13px,1.3vw,17px);
+    letter-spacing:0.14em;text-transform:uppercase;color:#B0B0B0;
+  }
+
+  @keyframes letterIn{
+    from{opacity:0;filter:blur(8px);transform:translateY(10px);}
+    to{opacity:1;filter:blur(0);transform:translateY(0);}
+  }
+  .ec-logo-letter{
+    display:inline-block;
+    animation:letterIn 0.6s cubic-bezier(.22,.61,.36,1) both;
+  }
+
+  .ec-arrows{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  @keyframes scrollArrowGlow{0%,100%{opacity:0.18;}50%{opacity:1;}}
+  .ec-scroll-arrow{animation:scrollArrowGlow 1.8s ease-in-out infinite;}
+
+  @media (prefers-reduced-motion: reduce){
+    .ec-logo-letter{animation:none !important;opacity:1 !important;filter:none !important;transform:none !important;}
+    .ec-scroll-arrow{animation:none !important;opacity:0.6 !important;}
+  }
+
+  /* ---------- portfolio tiles ---------- */
+  .ec-portfolio{
+    position:absolute;inset:0;z-index:3;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    opacity:0;
+  }
+  .ec-section-title{
+    display:flex;align-items:center;justify-content:center;
+    font-size:clamp(28px,4.6vw,58px);font-weight:200;letter-spacing:0.01em;
+    text-transform:uppercase;color:#FAFAFA;margin-bottom:24px;
+  }
+  .ec-tiles{display:flex;flex-wrap:wrap;justify-content:center;width:100%;height:280px;}
+  .ec-tile{
+    flex:1 1 480px;min-width:320px;height:100%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:transparent;color:#FAFAFA;border:none;cursor:pointer;text-align:center;
+    transition:background .3s cubic-bezier(.22,.61,.36,1),color .3s cubic-bezier(.22,.61,.36,1);
+  }
+  .ec-tile:first-child{border-right:1px solid rgba(250,250,250,0.14);}
+  .ec-tile-index{
+    font-size:12px;letter-spacing:0.22em;text-transform:uppercase;
+    color:#8C8C8C;margin-bottom:20px;
+  }
+  .ec-tile-label{font-size:clamp(28px,4.2vw,56px);font-weight:400;letter-spacing:0.01em;}
+
+  /* ---------- overlays: sobre / contato ---------- */
+  .ec-overlay{position:absolute;inset:0;opacity:0;pointer-events:none;}
+  .ec-overlay--sobre{z-index:5;}
+  .ec-overlay--contato{z-index:6;}
+  .ec-overlay-img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    object-position:center 25%;filter:grayscale(1) contrast(1.05);
+  }
+  .ec-overlay-scrim{position:absolute;inset:0;background:rgba(10,10,10,0.55);}
+  .ec-overlay-inner{
+    position:relative;z-index:1;max-width:1400px;margin:0 auto;
+    padding:0 clamp(24px,6vw,96px);width:100%;height:100%;
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .ec-overlay-title{
+    font-size:clamp(28px,4.6vw,58px);font-weight:200;letter-spacing:0.01em;
+    text-transform:uppercase;color:#FAFAFA;display:block;margin-bottom:28px;
+  }
+
+  .ec-sobre-body{
+    margin:0 0 24px;font-family:inherit;font-weight:400;font-size:15px;line-height:1.8;
+    color:#D8D8D8;max-width:56ch;white-space:pre-line;
+  }
+
+  .ec-contato-body{
+    margin:0 0 32px;font-family:inherit;font-weight:400;
+    font-size:clamp(18px,2.2vw,28px);line-height:1.35;letter-spacing:0.005em;
+    max-width:32ch;color:#FAFAFA;
+  }
+  .ec-cv{
+    display:inline-flex;align-items:center;gap:12px;padding:16px 32px;
+    border:1px solid rgba(250,250,250,0.3);color:#FAFAFA;
+    font-size:13px;letter-spacing:0.15em;text-transform:uppercase;
+    transition:background .3s ease,color .3s ease;
+    margin-bottom:40px;width:fit-content;
+  }
+  .ec-cv:hover{background:#FAFAFA;color:#0A0A0A;}
+  .ec-socials{
+    display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,48px);
+    border-top:1px solid rgba(250,250,250,0.2);padding-top:32px;
+  }
+  .ec-socials a{
+    position:relative;font-size:14px;letter-spacing:0.1em;text-transform:uppercase;
+    color:#D8D8D8;padding-bottom:8px;border-bottom:1px solid transparent;
+    transition:color .3s ease,border-color .3s ease;
+  }
+  .ec-socials a:hover{color:#FAFAFA;border-bottom-color:#FAFAFA;}
+</style>
+</head>
+<body>
+
+<div id="home">
+
+  <nav class="ec-nav">
+    <a href="#home">Home</a>
+    <a href="visualizacao.html">Archviz</a>
+    <a href="#arquitetura">Arquitetura</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#contato">Contato</a>
+  </nav>
+
+  <div class="ec-stage">
+    <div id="sobre" class="ec-anchor"></div>
+    <div id="contato" class="ec-anchor"></div>
+
+    <div class="ec-sticky">
+
+      <!-- hero: slideshow + logo + portfolio tiles -->
+      <div class="ec-hero" data-hero>
+        <img class="ec-slide is-active" src="uploads/TACK-NEXUS-FACHADA.jpg" alt="Fachada — projeto residencial">
+        <img class="ec-slide" src="uploads/EL-TORRE01-FACHADA%20BASE.jpg" alt="Fachada — torre em concreto e vegetação">
+        <img class="ec-slide" src="uploads/replicate-prediction-0qsf81y7nnrn80cwwevswjmxvm%20copiar.jpg" alt="Interior — sala integrada com piscina">
+
+        <div class="ec-hero-scrim"></div>
+
+        <div class="ec-logo-layer" data-logo>
+          <div class="ec-logo-row">
+            <div class="ec-logo-block">
+              <h1 class="ec-logo" aria-label="evandrocolombo"><span class="ec-logo-letter" style="animation-delay:0.00s;">e</span><span class="ec-logo-letter" style="animation-delay:0.26s;">v</span><span class="ec-logo-letter" style="animation-delay:0.03s;">a</span><span class="ec-logo-letter" style="animation-delay:0.29s;">n</span><span class="ec-logo-letter" style="animation-delay:0.31s;">d</span><span class="ec-logo-letter" style="animation-delay:0.34s;">r</span><span class="ec-logo-letter" style="animation-delay:0.06s;">o</span><span class="ec-logo-letter" style="animation-delay:0.36s;">c</span><span class="ec-logo-letter" style="animation-delay:0.09s;">o</span><span class="ec-logo-letter" style="animation-delay:0.39s;">l</span><span class="ec-logo-letter" style="animation-delay:0.12s;">o</span><span class="ec-logo-letter" style="animation-delay:0.41s;">m</span><span class="ec-logo-letter" style="animation-delay:0.44s;">b</span><span class="ec-logo-letter" style="animation-delay:0.15s;">o</span></h1>
+              <p class="ec-tagline">Artista Archviz | Arquiteto</p>
+            </div>
+            <div class="ec-arrows" aria-hidden="true">
+              <svg class="ec-scroll-arrow" style="animation-delay:0s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ec-scroll-arrow" style="animation-delay:0.3s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ec-scroll-arrow" style="animation-delay:0.6s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="ec-portfolio" data-portfolio>
+          <span class="ec-section-title">Portfólio</span>
+          <div class="ec-tiles">
+            <a class="ec-tile" href="visualizacao.html">
+              <span class="ec-tile-index">01</span>
+              <span class="ec-tile-label">ARCHVIZ</span>
+            </a>
+            <a class="ec-tile" href="#arquitetura">
+              <span class="ec-tile-index">02</span>
+              <span class="ec-tile-label">ARQUITETURA</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- sobre -->
+      <div class="ec-overlay ec-overlay--sobre" data-sobre-overlay>
+        <img class="ec-overlay-img" src="uploads/IMAGEM%20PERFIL.png" alt="Retrato de Evandro Colombo em galeria de arcos de concreto">
+        <div class="ec-overlay-scrim"></div>
+        <div class="ec-overlay-inner" data-sobre-text>
+          <span class="ec-overlay-title">Sobre</span>
+          <h2 class="ec-sobre-body">Sou Evandro Colombo, arquiteto e artista 3D que atua no limiar entre o projeto e a visualização.
+
+Me formei em Arquitetura e Urbanismo pela UNIMAR, na cidade de Marília, e minha trajetória passou pelo projeto executivo, pelo canteiro de obras e pelo BIM antes de se concentrar inteiramente em visualização arquitetônica.
+
+Fundei o StudioEn Arquitetura ao lado da minha esposa, também arquiteta, e logo em seguida a EnLabs, meu próprio estúdio de ArchViz, onde atendi arquitetos, construtoras e indústrias. Esses dois projetos profissionais — ou empresas, se preferirem chamar assim — não existem mais, pois decidi atuar como artista 3D autônomo, dando suporte a outros estúdios, e priorizar o aprofundamento e a pesquisa na área técnica do 3D e do CGI mais do que o empreendedorismo.
+
+Gosto de pensar em projeto de arquitetura como algo além da funcionalidade. Uma peça que traz ao mundo um impacto plástico, e que pode ser investigada precocemente através do 3D. Essa exploração traz para mim a capacidade de impactar outras pessoas e instigá-las a perceber a arquitetura com a intenção proposta pela forma, luz, atmosfera e conceito.
+
+Neste site, torno pública um pouco dessa minha caminhada.</h2>
+        </div>
+      </div>
+
+      <!-- contato -->
+      <div class="ec-overlay ec-overlay--contato" data-contato-overlay>
+        <div class="ec-overlay-inner" data-contato-text>
+          <span class="ec-overlay-title">Contato</span>
+          <h2 class="ec-contato-body">Entre em contato comigo pelas minhas redes. Estou sempre pronto para conversar sobre arquitetura, arte, 3D e correlatos. :)</h2>
+          <a class="ec-cv" href="uploads/CV-Evandro-Colombo.pdf" download>Download CV</a>
+          <div class="ec-socials">
+            <a href="https://instagram.com/art.evandrocolombo" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://behance.net/evandro-reis" target="_blank" rel="noopener noreferrer">Behance</a>
+            <a href="https://wa.me/5514998564066" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:arqevandrocolombo@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var slides         = Array.prototype.slice.call(document.querySelectorAll('.ec-slide'));
+  var heroLayer      = document.querySelector('[data-hero]');
+  var logoEl         = document.querySelector('[data-logo]');
+  var btnEl          = document.querySelector('[data-portfolio]');
+  var sobreOverlay   = document.querySelector('[data-sobre-overlay]');
+  var sobreText      = document.querySelector('[data-sobre-text]');
+  var contatoOverlay = document.querySelector('[data-contato-overlay]');
+  var contatoText    = document.querySelector('[data-contato-text]');
+
+  var reducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function clamp01(n) { return Math.min(Math.max(n, 0), 1); }
+
+  /* ---------- slideshow ---------- */
+  var activeIndex = 0;
+  setInterval(function () {
+    slides[activeIndex].classList.remove('is-active');
+    activeIndex = (activeIndex + 1) % slides.length;
+    slides[activeIndex].classList.add('is-active');
+  }, reducedMotion ? 6000 : 5500);
+
+  /* ---------- scroll-driven cross-fades ---------- */
+  function updateScrollFade() {
+    var vh = window.innerHeight || 1;
+    var progress = clamp01(window.scrollY / vh);
+
+    var tp  = clamp01((window.scrollY - vh * 1.6) / (vh * 0.4));
+    var tp2 = clamp01((window.scrollY - vh * 3.2) / (vh * 0.4));
+
+    if (reducedMotion) {
+      var showLogo = progress < 0.5;
+      logoEl.style.opacity = showLogo ? '1' : '0';
+      logoEl.style.transform = 'none';
+      btnEl.style.opacity = showLogo ? '0' : '1';
+      btnEl.style.transform = 'none';
+      btnEl.style.pointerEvents = showLogo ? 'none' : 'auto';
+
+      heroLayer.style.opacity = tp > 0.5 ? '0' : '1';
+      sobreOverlay.style.opacity = tp > 0.5 ? '1' : '0';
+      sobreText.style.transform = 'none';
+
+      contatoOverlay.style.opacity = tp2 > 0.5 ? '1' : '0';
+      contatoOverlay.style.pointerEvents = tp2 > 0.5 ? 'auto' : 'none';
+      sobreText.style.opacity = tp2 > 0.25 ? '0' : '1';
+      contatoText.style.transform = 'none';
+      return;
+    }
+
+    // logo fades out over the first 45% of a viewport of scroll,
+    // the portfolio tiles fade in over the remaining 55%
+    var lp = clamp01(progress / 0.45);
+    logoEl.style.opacity = String(1 - lp);
+    logoEl.style.transform = 'translateY(' + (-40 * lp) + 'px)';
+
+    var bp = clamp01((progress - 0.45) / 0.55);
+    btnEl.style.opacity = String(bp);
+    btnEl.style.transform = 'translateY(' + (20 * (1 - bp)) + 'px)';
+    btnEl.style.pointerEvents = (bp > 0.4 && tp < 0.05) ? 'auto' : 'none';
+
+    // hero → sobre
+    heroLayer.style.opacity = String(1 - tp);
+    heroLayer.style.transform = 'translateY(' + (-70 * tp) + 'px)';
+    sobreOverlay.style.opacity = String(tp);
+    sobreText.style.transform = 'translateY(' + (40 * (1 - tp)) + 'px)';
+
+    // sobre → contato
+    var sobreFadeOut = Math.min(tp2 / 0.5, 1);
+    var contatoFadeIn = Math.max((tp2 - 0.5) / 0.5, 0);
+    sobreText.style.opacity = String(1 - sobreFadeOut);
+    sobreText.style.transform =
+      'translateY(' + (40 * (1 - tp) - 30 * sobreFadeOut) + 'px)';
+    contatoOverlay.style.opacity = String(contatoFadeIn);
+    contatoOverlay.style.pointerEvents = contatoFadeIn > 0.4 ? 'auto' : 'none';
+    contatoText.style.transform = 'translateY(' + (30 * (1 - contatoFadeIn)) + 'px)';
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { updateScrollFade(); ticking = false; });
+  }, { passive: true });
+
+  window.addEventListener('resize', updateScrollFade, { passive: true });
+  updateScrollFade();
+
+  /* deep links (#sobre / #contato) land inside the sticky stage */
+  if (window.location.hash) {
+    var hash = window.location.hash;
+    setTimeout(function () {
+      var el = document.querySelector(hash);
+      if (el) el.scrollIntoView();
+    }, 50);
+  }
+})();
+</script>
+
+</body>
+</html>
