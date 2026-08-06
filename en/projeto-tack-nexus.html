@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Casa H&amp;R — Arquitetura | Evandro Colombo</title>
-<meta name="description" content="Plantas e galeria completa do projeto Casa H&amp;R, por Evandro Colombo.">
+<title>Tack Nexus — Archviz | Evandro Colombo</title>
+<meta name="description" content="Full gallery of the Tack Nexus project — archviz renders by Evandro Colombo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap">
@@ -73,25 +73,6 @@
   .ec-back:hover{background:var(--paper);color:var(--ink);}
   .ec-back svg{flex:none;}
   .ec-back:hover svg path{stroke:var(--ink);}
-
-  .ec-section-label{
-    max-width:var(--content-max);margin:0 auto;padding:var(--space-8) var(--content-pad) 16px;
-    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gray-400);
-  }
-  .ec-section-label:first-of-type{padding-top:8px;}
-
-  .ec-plans{
-    max-width:var(--content-max);margin:0 auto;padding:0 var(--content-pad) var(--space-8);
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;
-  }
-  .ec-plan-card{
-    background:#F4F4F2;border:none;padding:0;cursor:pointer;
-    display:flex;flex-direction:column;text-align:left;overflow:hidden;
-  }
-  .ec-plan-card img{width:100%;height:auto;display:block;}
-  .ec-plan-label{
-    padding:14px 18px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#4D4D4D;
-  }
 
   .ec-grid{
     display:grid;grid-template-columns:repeat(3,1fr);
@@ -194,34 +175,30 @@
 <nav class="ec-nav">
   <div class="ec-nav-links" data-nav-links>
     <a href="index.html#home">Home</a>
-    <a href="visualizacao.html">Archviz</a>
-    <a href="arquitetura.html" class="is-active">Arquitetura</a>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="visualizacao.html" class="is-active">Archviz</a>
+    <a href="arquitetura.html">Architecture</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
   </div>
-  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">
+  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <div class="ec-lang">
-  <span class="is-current">PT</span>
+  <a href="../projeto-tack-nexus.html">PT</a>
   <span class="ec-lang-sep">/</span>
-  <a href="en/projeto-casa-hr.html">EN</a>
+  <span class="is-current">EN</span>
 </div>
 
 <header class="ec-page-header">
-  <a class="ec-back" href="arquitetura.html">
+  <a class="ec-back" href="visualizacao.html">
     <svg width="14" height="12" viewBox="0 0 16 14" fill="none"><path d="M7 1L1 7L7 13M1 7H15" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Voltar ao portfólio
+    Back to portfolio
   </a>
-  <h1 class="ec-page-title">CASA H&amp;R</h1>
+  <h1 class="ec-page-title">TACK NEXUS</h1>
 </header>
 
-<span class="ec-section-label">Plantas</span>
-<div class="ec-plans" data-plans></div>
-
-<span class="ec-section-label">Imagens</span>
 <div class="ec-grid" data-gallery></div>
 
 <footer class="ec-footer">
@@ -229,13 +206,13 @@
 </footer>
 
 <div class="ec-lightbox" data-lightbox>
-  <button class="ec-lightbox-close" data-lightbox-close aria-label="Fechar">
+  <button class="ec-lightbox-close" data-lightbox-close aria-label="Close">
     <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M1 1L19 19M19 1L1 19" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round"/></svg>
   </button>
-  <button class="ec-lightbox-prev" data-lightbox-prev aria-label="Anterior">
+  <button class="ec-lightbox-prev" data-lightbox-prev aria-label="Previous">
     <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M12 1L2 12L12 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-  <button class="ec-lightbox-next" data-lightbox-next aria-label="Próxima">
+  <button class="ec-lightbox-next" data-lightbox-next aria-label="Next">
     <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M2 1L12 12L2 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <figure class="ec-lightbox-figure">
@@ -249,54 +226,53 @@
 (function () {
   'use strict';
 
-  var PROJECT = 'Casa H&R';
-
   var IMAGES = [
-    { src: 'uploads/casa-hr/planta-terreo.jpg',            label: 'Planta — Térreo',            kind: 'plan' },
-    { src: 'uploads/casa-hr/planta-garagem-subsolo.jpg',   label: 'Planta — Garagem/Subsolo',   kind: 'plan' },
-    { src: 'uploads/casa-hr/fachada-002.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/fachada-003.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/fachada-004.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/living-01.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-02.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-03.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-04.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-05.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-01.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-02.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-03.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/closet.jpg',      label: 'Closet',  kind: 'photo' },
-    { src: 'uploads/casa-hr/banheiro.jpg',    label: 'Banheiro', kind: 'photo' },
-    { src: 'uploads/casa-hr/penteadeira.jpg', label: 'Penteadeira', kind: 'photo' },
-    { src: 'uploads/casa-hr/quarto-escritorio.jpg', label: 'Quarto Escritório', kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-01.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-02.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-03.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-04.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/garagem.jpg',        label: 'Garagem',          kind: 'photo' },
-    { src: 'uploads/casa-hr/garagem-escada.jpg', label: 'Garagem e Escada', kind: 'photo' }
+    { src: '../uploads/TACK-NEXUS-FACHADA.jpg',           label: 'Facade' },
+    { src: '../uploads/tack-nexus/fachada-vertical.jpg', label: 'Vertical Facade' },
+    { src: '../uploads/tack-nexus/fachada-dia.jpg',       label: 'Daytime Facade' },
+    { src: '../uploads/tack-nexus/fachada-crop.jpg',      label: 'Facade (detail)' },
+    { src: '../uploads/tack-nexus/piscina.jpg',           label: 'Pool' },
+    { src: '../uploads/tack-nexus/crop-piscina.jpg',      label: 'Pool (detail)' },
+    { src: '../uploads/tack-nexus/lazer.jpg',             label: 'Leisure Area' },
+    { src: '../uploads/tack-nexus/giardino.jpg',          label: 'Giardino' },
+    { src: '../uploads/tack-nexus/playground.jpg',        label: 'Playground' },
+    { src: '../uploads/tack-nexus/quadra.jpg',            label: 'Sports Court' },
+    { src: '../uploads/tack-nexus/picnic.jpg',             label: 'Picnic Area' },
+    { src: '../uploads/tack-nexus/churrasqueira.jpg',      label: 'BBQ Area' },
+    { src: '../uploads/tack-nexus/beer-lounge.jpg',        label: 'Beer Lounge' },
+    { src: '../uploads/tack-nexus/sports-bar.jpg',         label: 'Sports Bar' },
+    { src: '../uploads/tack-nexus/pet-place.jpg',          label: 'Pet Place' },
+    { src: '../uploads/tack-nexus/bikeshare.jpg',          label: 'Bikeshare' },
+    { src: '../uploads/tack-nexus/portaria.jpg',           label: 'Reception' },
+    { src: '../uploads/tack-nexus/coworking.jpg',          label: 'Coworking' },
+    { src: '../uploads/tack-nexus/living.jpg',             label: 'Living Room' },
+    { src: '../uploads/tack-nexus/mercado.jpg',            label: 'Market' },
+    { src: '../uploads/tack-nexus/delivery.jpg',           label: 'Delivery Room' },
+    { src: '../uploads/tack-nexus/fitness.jpg',            label: 'Fitness Room' },
+    { src: '../uploads/tack-nexus/brinquedoteca.jpg',      label: 'Playroom' },
+    { src: '../uploads/tack-nexus/lavanderia.jpg',         label: 'Laundry Room' },
+    { src: '../uploads/tack-nexus/festas.jpg',             label: 'Party Room' },
+    { src: '../uploads/tack-nexus/dormitorio.jpg',         label: 'Bedroom' },
+    { src: '../uploads/tack-nexus/suite.jpg',              label: 'Suite' }
   ];
 
-  var plans   = document.querySelector('[data-plans]');
   var gallery = document.querySelector('[data-gallery]');
-
   IMAGES.forEach(function (item, i) {
-    var isPlan = item.kind === 'plan';
     var fig = document.createElement('button');
-    fig.className = isPlan ? 'ec-plan-card' : 'ec-grid-item';
+    fig.className = 'ec-grid-item';
     fig.type = 'button';
     fig.setAttribute('data-index', String(i));
-    fig.setAttribute('aria-label', 'Abrir imagem: ' + item.label);
+    fig.setAttribute('aria-label', 'Open image: ' + item.label);
     fig.innerHTML =
-      '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
-      '<span class="' + (isPlan ? 'ec-plan-label' : 'ec-grid-label') + '">' + item.label + '</span>';
-    (isPlan ? plans : gallery).appendChild(fig);
+      '<img src="' + item.src + '" alt="Tack Nexus — ' + item.label + '" loading="lazy">' +
+      '<span class="ec-grid-label">' + item.label + '</span>';
+    gallery.appendChild(fig);
   });
 
-  var lightbox      = document.querySelector('[data-lightbox]');
-  var lightboxImg    = document.querySelector('[data-lightbox-img]');
-  var lightboxCap    = document.querySelector('[data-lightbox-caption]');
-  var lightboxCount  = document.querySelector('[data-lightbox-count]');
+  var lightbox     = document.querySelector('[data-lightbox]');
+  var lightboxImg   = document.querySelector('[data-lightbox-img]');
+  var lightboxCap   = document.querySelector('[data-lightbox-caption]');
+  var lightboxCount = document.querySelector('[data-lightbox-count]');
   var current = 0;
 
   function openLightbox(index) {
@@ -314,7 +290,7 @@
   function render() {
     var item = IMAGES[current];
     lightboxImg.src = item.src;
-    lightboxImg.alt = PROJECT + ' — ' + item.label;
+    lightboxImg.alt = 'Tack Nexus — ' + item.label;
     lightboxCap.textContent = item.label;
     lightboxCount.textContent = (current + 1) + ' / ' + IMAGES.length;
   }
@@ -324,13 +300,11 @@
     render();
   }
 
-  function onGalleryClick(e) {
+  gallery.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-index]');
     if (!btn) return;
     openLightbox(Number(btn.getAttribute('data-index')));
-  }
-  plans.addEventListener('click', onGalleryClick);
-  gallery.addEventListener('click', onGalleryClick);
+  });
 
   document.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
   document.querySelector('[data-lightbox-prev]').addEventListener('click', function () { step(-1); });

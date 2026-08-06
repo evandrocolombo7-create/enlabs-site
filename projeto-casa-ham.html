@@ -46,6 +46,17 @@
   .ec-nav a.is-active{color:var(--paper);border-bottom-color:var(--paper);}
   .ec-nav-toggle{display:none;}
 
+  /* ---------- language switch ---------- */
+  .ec-lang{
+    position:fixed;top:24px;right:clamp(24px,6vw,96px);z-index:51;
+    display:flex;align-items:center;gap:6px;
+    font-size:11px;letter-spacing:0.12em;
+  }
+  .ec-lang a{color:#8C8C8C;transition:color .3s ease;}
+  .ec-lang a:hover{color:var(--paper);}
+  .ec-lang .is-current{color:var(--paper);}
+  .ec-lang-sep{color:#5A5A5A;}
+
   /* ---------- hero (image + back button + title overlaid at the bottom) ---------- */
   .ec-hero{position:relative;height:86vh;min-height:520px;max-height:920px;overflow:hidden;}
   .ec-hero img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -187,6 +198,8 @@
     }
     .ec-nav-links.is-open{opacity:1;visibility:visible;pointer-events:auto;}
     .ec-nav-links a{font-size:15px;color:#D8D8D8;}
+
+    .ec-lang{top:22px;left:20px;right:auto;}
   }
   @media (max-width:480px){
     .ec-grid{grid-template-columns:1fr;}
@@ -244,6 +257,12 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<div class="ec-lang">
+  <span class="is-current">PT</span>
+  <span class="ec-lang-sep">/</span>
+  <a href="en/projeto-casa-ham.html">EN</a>
+</div>
 
 <section class="ec-hero">
   <img src="uploads/casa-ham/capa.jpg" alt="Fachada — Casa Ham">

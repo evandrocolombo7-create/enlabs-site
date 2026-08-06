@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Casa H&amp;R — Arquitetura | Evandro Colombo</title>
-<meta name="description" content="Plantas e galeria completa do projeto Casa H&amp;R, por Evandro Colombo.">
+<title>Casa H&amp;R — Architecture | Evandro Colombo</title>
+<meta name="description" content="Floor plans and full project gallery for Casa H&amp;R, by Evandro Colombo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap">
@@ -195,33 +195,33 @@
   <div class="ec-nav-links" data-nav-links>
     <a href="index.html#home">Home</a>
     <a href="visualizacao.html">Archviz</a>
-    <a href="arquitetura.html" class="is-active">Arquitetura</a>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="arquitetura.html" class="is-active">Architecture</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
   </div>
-  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">
+  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <div class="ec-lang">
-  <span class="is-current">PT</span>
+  <a href="../projeto-casa-hr.html">PT</a>
   <span class="ec-lang-sep">/</span>
-  <a href="en/projeto-casa-hr.html">EN</a>
+  <span class="is-current">EN</span>
 </div>
 
 <header class="ec-page-header">
   <a class="ec-back" href="arquitetura.html">
     <svg width="14" height="12" viewBox="0 0 16 14" fill="none"><path d="M7 1L1 7L7 13M1 7H15" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Voltar ao portfólio
+    Back to portfolio
   </a>
   <h1 class="ec-page-title">CASA H&amp;R</h1>
 </header>
 
-<span class="ec-section-label">Plantas</span>
+<span class="ec-section-label">Floor Plans</span>
 <div class="ec-plans" data-plans></div>
 
-<span class="ec-section-label">Imagens</span>
+<span class="ec-section-label">Images</span>
 <div class="ec-grid" data-gallery></div>
 
 <footer class="ec-footer">
@@ -229,13 +229,13 @@
 </footer>
 
 <div class="ec-lightbox" data-lightbox>
-  <button class="ec-lightbox-close" data-lightbox-close aria-label="Fechar">
+  <button class="ec-lightbox-close" data-lightbox-close aria-label="Close">
     <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M1 1L19 19M19 1L1 19" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round"/></svg>
   </button>
-  <button class="ec-lightbox-prev" data-lightbox-prev aria-label="Anterior">
+  <button class="ec-lightbox-prev" data-lightbox-prev aria-label="Previous">
     <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M12 1L2 12L12 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-  <button class="ec-lightbox-next" data-lightbox-next aria-label="Próxima">
+  <button class="ec-lightbox-next" data-lightbox-next aria-label="Next">
     <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M2 1L12 12L2 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <figure class="ec-lightbox-figure">
@@ -252,29 +252,29 @@
   var PROJECT = 'Casa H&R';
 
   var IMAGES = [
-    { src: 'uploads/casa-hr/planta-terreo.jpg',            label: 'Planta — Térreo',            kind: 'plan' },
-    { src: 'uploads/casa-hr/planta-garagem-subsolo.jpg',   label: 'Planta — Garagem/Subsolo',   kind: 'plan' },
-    { src: 'uploads/casa-hr/fachada-002.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/fachada-003.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/fachada-004.jpg', label: 'Fachada', kind: 'photo' },
-    { src: 'uploads/casa-hr/living-01.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-02.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-03.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-04.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/living-05.jpg',   label: 'Living',  kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-01.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-02.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/suite-03.jpg',    label: 'Suíte',   kind: 'photo' },
-    { src: 'uploads/casa-hr/closet.jpg',      label: 'Closet',  kind: 'photo' },
-    { src: 'uploads/casa-hr/banheiro.jpg',    label: 'Banheiro', kind: 'photo' },
-    { src: 'uploads/casa-hr/penteadeira.jpg', label: 'Penteadeira', kind: 'photo' },
-    { src: 'uploads/casa-hr/quarto-escritorio.jpg', label: 'Quarto Escritório', kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-01.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-02.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-03.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/lazer-04.jpg',    label: 'Lazer',   kind: 'photo' },
-    { src: 'uploads/casa-hr/garagem.jpg',        label: 'Garagem',          kind: 'photo' },
-    { src: 'uploads/casa-hr/garagem-escada.jpg', label: 'Garagem e Escada', kind: 'photo' }
+    { src: '../uploads/casa-hr/planta-terreo.jpg',            label: 'Floor Plan — Ground Floor',        kind: 'plan' },
+    { src: '../uploads/casa-hr/planta-garagem-subsolo.jpg',   label: 'Floor Plan — Garage/Basement',     kind: 'plan' },
+    { src: '../uploads/casa-hr/fachada-002.jpg', label: 'Facade', kind: 'photo' },
+    { src: '../uploads/casa-hr/fachada-003.jpg', label: 'Facade', kind: 'photo' },
+    { src: '../uploads/casa-hr/fachada-004.jpg', label: 'Facade', kind: 'photo' },
+    { src: '../uploads/casa-hr/living-01.jpg',   label: 'Living Room',  kind: 'photo' },
+    { src: '../uploads/casa-hr/living-02.jpg',   label: 'Living Room',  kind: 'photo' },
+    { src: '../uploads/casa-hr/living-03.jpg',   label: 'Living Room',  kind: 'photo' },
+    { src: '../uploads/casa-hr/living-04.jpg',   label: 'Living Room',  kind: 'photo' },
+    { src: '../uploads/casa-hr/living-05.jpg',   label: 'Living Room',  kind: 'photo' },
+    { src: '../uploads/casa-hr/suite-01.jpg',    label: 'Suite',   kind: 'photo' },
+    { src: '../uploads/casa-hr/suite-02.jpg',    label: 'Suite',   kind: 'photo' },
+    { src: '../uploads/casa-hr/suite-03.jpg',    label: 'Suite',   kind: 'photo' },
+    { src: '../uploads/casa-hr/closet.jpg',      label: 'Closet',  kind: 'photo' },
+    { src: '../uploads/casa-hr/banheiro.jpg',    label: 'Bathroom', kind: 'photo' },
+    { src: '../uploads/casa-hr/penteadeira.jpg', label: 'Vanity Room', kind: 'photo' },
+    { src: '../uploads/casa-hr/quarto-escritorio.jpg', label: 'Office Bedroom', kind: 'photo' },
+    { src: '../uploads/casa-hr/lazer-01.jpg',    label: 'Leisure Area',   kind: 'photo' },
+    { src: '../uploads/casa-hr/lazer-02.jpg',    label: 'Leisure Area',   kind: 'photo' },
+    { src: '../uploads/casa-hr/lazer-03.jpg',    label: 'Leisure Area',   kind: 'photo' },
+    { src: '../uploads/casa-hr/lazer-04.jpg',    label: 'Leisure Area',   kind: 'photo' },
+    { src: '../uploads/casa-hr/garagem.jpg',        label: 'Garage',           kind: 'photo' },
+    { src: '../uploads/casa-hr/garagem-escada.jpg', label: 'Garage and Stairs', kind: 'photo' }
   ];
 
   var plans   = document.querySelector('[data-plans]');
@@ -286,7 +286,7 @@
     fig.className = isPlan ? 'ec-plan-card' : 'ec-grid-item';
     fig.type = 'button';
     fig.setAttribute('data-index', String(i));
-    fig.setAttribute('aria-label', 'Abrir imagem: ' + item.label);
+    fig.setAttribute('aria-label', 'Open image: ' + item.label);
     fig.innerHTML =
       '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
       '<span class="' + (isPlan ? 'ec-plan-label' : 'ec-grid-label') + '">' + item.label + '</span>';
