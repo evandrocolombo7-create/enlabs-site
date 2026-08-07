@@ -106,9 +106,10 @@
   }
   .ec-story-media{position:sticky;top:110px;}
   .ec-story-media-btn{
-    display:block;width:100%;border:none;padding:0;cursor:pointer;background:transparent;text-align:left;
+    display:block;width:100%;border:none;padding:0;cursor:default;background:transparent;text-align:left;
   }
   .ec-story-media-btn img{width:100%;height:auto;display:block;}
+  .ec-story-media-btn--multiply img{mix-blend-mode:multiply;}
   .ec-media-label{
     display:block;margin-top:14px;font-size:12px;letter-spacing:0.08em;
     text-transform:uppercase;color:var(--gray-600);
@@ -118,21 +119,24 @@
   }
   .ec-story-text p + p{margin-top:22px;}
 
-  /* ---------- planta / cortes / isometrico: stacked, transparent PNGs on the page bg ---------- */
+  /* ---------- planta / cortes / isometrico: stacked, 10% smaller, centered ---------- */
   .ec-tech{max-width:var(--content-max);margin:0 auto;padding:var(--space-8) var(--content-pad);border-bottom:1px solid var(--line);}
   .ec-tech > * + *{margin-top:56px;}
   .ec-tech-stack:empty,
   .ec-cortes-grid:empty{display:none;margin-top:0;}
-  .ec-tech-stack{display:flex;flex-direction:column;gap:56px;}
+  .ec-tech-stack{display:flex;flex-direction:column;align-items:center;gap:56px;}
   .ec-tech-item{
-    display:block;width:100%;border:none;padding:0;cursor:pointer;background:transparent;text-align:left;
+    display:block;width:90%;border:none;padding:0;cursor:default;background:transparent;text-align:left;
   }
   .ec-tech-item img{width:100%;height:auto;display:block;}
 
   /* cortes: stacked one below the other, same shared scale so proportions stay consistent */
-  .ec-cortes-grid{display:flex;flex-direction:column;gap:56px;align-items:flex-start;}
-  .ec-cortes-grid .ec-tech-item{width:auto;max-width:100%;}
+  .ec-cortes-grid{display:flex;flex-direction:column;align-items:center;gap:56px;}
+  .ec-cortes-grid .ec-tech-item{width:auto;max-width:90%;}
   .ec-cortes-grid .ec-tech-item img{width:auto;max-width:100%;height:auto;}
+
+  /* technical drawings: multiply blend keeps them consistent with the other projects */
+  .ec-tech-item--multiply img{mix-blend-mode:multiply;}
 
   /* ---------- gallery ---------- */
   .ec-gallery-section{max-width:var(--content-max);margin:0 auto;padding:var(--space-8) var(--content-pad);}
@@ -326,11 +330,11 @@
   var PROJECT = 'Casa Florença';
 
   var IMAGES = [
-    { src: 'uploads/casa-florenca/croqui.png',      label: 'Croqui',      kind: 'story' },
-    { src: 'uploads/casa-florenca/planta.png',      label: '',            kind: 'plan-top' },
-    { src: 'uploads/casa-florenca/corte-a.png',     label: '',            kind: 'corte' },
-    { src: 'uploads/casa-florenca/corte-b.png',     label: '',            kind: 'corte' },
-    { src: 'uploads/casa-florenca/isometrico.png',  label: 'Isométrico',  kind: 'plan-bottom' },
+    { src: 'uploads/casa-florenca/croqui.png',      label: 'Croqui',      kind: 'story', multiply: true },
+    { src: 'uploads/casa-florenca/planta.png',      label: '',            kind: 'plan-top', multiply: true },
+    { src: 'uploads/casa-florenca/corte-a.png',     label: '',            kind: 'corte', multiply: true },
+    { src: 'uploads/casa-florenca/corte-b.png',     label: '',            kind: 'corte', multiply: true },
+    { src: 'uploads/casa-florenca/isometrico.png',  label: 'Isométrico',  kind: 'plan-bottom', multiply: true },
     { src: 'uploads/casa-florenca/fachada-001.jpg',       label: 'Fachada',            kind: 'photo' },
     { src: 'uploads/casa-florenca/fachada-002.jpg',       label: 'Fachada',            kind: 'photo' },
     { src: 'uploads/casa-florenca/sala.jpg',              label: 'Sala',               kind: 'photo' },
@@ -357,32 +361,42 @@
   var storyMedia = document.querySelector('[data-story-media]');
   var gallery    = document.querySelector('[data-gallery]');
 
-  IMAGES.forEach(function (item, i) {
-    var fig = document.createElement('button');
-    fig.type = 'button';
-    fig.setAttribute('data-index', String(i));
-    fig.setAttribute('aria-label', 'Abrir imagem: ' + (item.label || PROJECT));
+  var LIGHTBOX = [];
 
+  IMAGES.forEach(function (item) {
     if (item.kind === 'plan-top' || item.kind === 'corte' || item.kind === 'plan-bottom') {
-      fig.className = 'ec-tech-item';
-      fig.innerHTML =
+      var tech = document.createElement('div');
+      tech.className = 'ec-tech-item' + (item.multiply ? ' ec-tech-item--multiply' : '');
+      tech.innerHTML =
         '<img src="' + item.src + '" alt="' + PROJECT + (item.label ? ' — ' + item.label : '') + '" loading="lazy">' +
         (item.label ? '<span class="ec-media-label">' + item.label + '</span>' : '');
       var target = item.kind === 'plan-top' ? plansTop : item.kind === 'corte' ? cortes : plansBottom;
-      target.appendChild(fig);
-    } else if (item.kind === 'story') {
-      fig.className = 'ec-story-media-btn';
-      fig.innerHTML =
+      target.appendChild(tech);
+      return;
+    }
+
+    if (item.kind === 'story') {
+      var story = document.createElement('div');
+      story.className = 'ec-story-media-btn' + (item.multiply ? ' ec-story-media-btn--multiply' : '');
+      story.innerHTML =
         '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
         '<span class="ec-media-label">' + item.label + '</span>';
-      storyMedia.appendChild(fig);
-    } else {
-      fig.className = 'ec-grid-item';
-      fig.innerHTML =
-        '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
-        '<span class="ec-grid-label">' + item.label + '</span>';
-      gallery.appendChild(fig);
+      storyMedia.appendChild(story);
+      return;
     }
+
+    var index = LIGHTBOX.length;
+    LIGHTBOX.push(item);
+
+    var fig = document.createElement('button');
+    fig.type = 'button';
+    fig.setAttribute('data-index', String(index));
+    fig.setAttribute('aria-label', 'Abrir imagem: ' + (item.label || PROJECT));
+    fig.className = 'ec-grid-item';
+    fig.innerHTML =
+      '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
+      '<span class="ec-grid-label">' + item.label + '</span>';
+    gallery.appendChild(fig);
   });
 
   var lightbox      = document.querySelector('[data-lightbox]');
@@ -404,15 +418,15 @@
   }
 
   function render() {
-    var item = IMAGES[current];
+    var item = LIGHTBOX[current];
     lightboxImg.src = item.src;
     lightboxImg.alt = PROJECT + (item.label ? ' — ' + item.label : '');
     lightboxCap.textContent = item.label;
-    lightboxCount.textContent = (current + 1) + ' / ' + IMAGES.length;
+    lightboxCount.textContent = (current + 1) + ' / ' + LIGHTBOX.length;
   }
 
   function step(delta) {
-    current = (current + delta + IMAGES.length) % IMAGES.length;
+    current = (current + delta + LIGHTBOX.length) % LIGHTBOX.length;
     render();
   }
 
@@ -421,10 +435,6 @@
     if (!btn) return;
     openLightbox(Number(btn.getAttribute('data-index')));
   }
-  plansTop.addEventListener('click', onGalleryClick);
-  cortes.addEventListener('click', onGalleryClick);
-  plansBottom.addEventListener('click', onGalleryClick);
-  storyMedia.addEventListener('click', onGalleryClick);
   gallery.addEventListener('click', onGalleryClick);
 
   document.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);

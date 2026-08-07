@@ -104,11 +104,13 @@
     border-bottom:1px solid var(--line);
     display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:56px;align-items:start;
   }
-  .ec-story-media{position:sticky;top:110px;}
+  .ec-story-media{position:sticky;top:110px;background:var(--bg);}
+  .ec-story-media img{width:100%;height:auto;display:block;}
   .ec-story-media-btn{
-    display:block;width:100%;border:none;padding:0;cursor:pointer;background:transparent;text-align:left;
+    display:block;width:100%;border:none;padding:0;cursor:default;background:transparent;text-align:left;
   }
   .ec-story-media-btn img{width:100%;height:auto;display:block;}
+  .ec-story-media-btn--multiply img{mix-blend-mode:multiply;}
   .ec-media-label{
     display:block;margin-top:14px;font-size:12px;letter-spacing:0.08em;
     text-transform:uppercase;color:var(--gray-600);
@@ -118,23 +120,56 @@
   }
   .ec-story-text p + p{margin-top:22px;}
 
-  /* ---------- floor plan / sections / isometric: stacked ---------- */
+  /* ---------- story continuation (remaining paragraphs, aligned under the text column) ---------- */
+  .ec-story-continued{
+    max-width:var(--content-max);margin:0 auto;padding:var(--space-8) var(--content-pad);
+    border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:56px;align-items:start;
+  }
+  .ec-story-continued-text p{
+    font-size:15.5px;line-height:1.85;color:var(--gray-600);max-width:62ch;
+  }
+  .ec-story-continued-text p + p{margin-top:22px;}
+
+  /* ---------- scroll-driven isometric rotation ---------- */
+  .ec-scrollanim{
+    width:100%;border-bottom:1px solid var(--line);
+    height:300vh;position:relative;
+  }
+  .ec-scrollanim-sticky{
+    position:sticky;top:0;height:100svh;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    padding:0 clamp(0px,2vw,24px);
+  }
+  .ec-scrollanim-frame{
+    display:block;width:100%;height:94%;object-fit:contain;
+    mix-blend-mode:multiply;
+  }
+  .ec-scrollanim.is-static{height:auto;}
+  .ec-scrollanim.is-static .ec-scrollanim-sticky{
+    position:static;height:auto;padding:var(--space-8) var(--content-pad);
+  }
+  .ec-scrollanim.is-static .ec-scrollanim-frame{width:100%;height:auto;}
+
+  /* ---------- floor plan / sections / isometric: stacked, 10% smaller, centered ---------- */
   .ec-tech{max-width:var(--content-max);margin:0 auto;padding:var(--space-8) var(--content-pad);border-bottom:1px solid var(--line);}
   .ec-tech > * + *{margin-top:56px;}
   .ec-tech-stack:empty,
   .ec-cortes-grid:empty{display:none;margin-top:0;}
-  .ec-tech-stack{display:flex;flex-direction:column;gap:56px;}
+  .ec-tech-stack{display:flex;flex-direction:column;align-items:center;gap:56px;}
   .ec-tech-item{
-    display:block;width:100%;border:none;padding:0;cursor:pointer;background:transparent;text-align:left;
+    display:block;width:90%;border:none;padding:0;cursor:default;background:transparent;text-align:left;
   }
   .ec-tech-item img{width:100%;height:auto;display:block;}
 
   /* sections: stacked one below the other, same shared scale so proportions stay consistent */
-  .ec-cortes-grid{display:flex;flex-direction:column;gap:56px;align-items:flex-start;}
-  .ec-cortes-grid .ec-tech-item{width:auto;max-width:100%;}
+  .ec-cortes-grid{display:flex;flex-direction:column;align-items:center;gap:56px;}
+  .ec-cortes-grid .ec-tech-item{width:auto;max-width:90%;}
   .ec-cortes-grid .ec-tech-item img{width:auto;max-width:100%;height:auto;}
+  .ec-cortes-grid .ec-tech-item--half{max-width:50%;}
+  .ec-cortes-grid .ec-tech-item--small{width:65%;max-width:65%;}
 
-  /* orthographic sections have no real transparency: multiply blend drops the white background */
+  /* technical drawings have no real transparency: multiply blend drops the white background */
   .ec-tech-item--multiply img{mix-blend-mode:multiply;}
 
   /* ---------- gallery ---------- */
@@ -168,12 +203,15 @@
   @media (max-width:900px){
     .ec-story{grid-template-columns:1fr;gap:32px;}
     .ec-story-media{position:static;}
+    .ec-story-continued{grid-template-columns:1fr;gap:32px;}
+    .ec-story-continued-text{grid-column:1;}
   }
 
   @media (max-width:820px){
     .ec-grid{grid-template-columns:repeat(2,1fr);}
     .ec-tech-stack{gap:40px;}
     .ec-back{top:84px;}
+    .ec-scrollanim{height:216vh;}
 
     .ec-nav-toggle{
       display:flex;flex-direction:column;justify-content:center;gap:5px;
@@ -284,6 +322,20 @@
     <span class="ec-section-label">About the Project</span>
     <p>Casa Ham was designed for a young couple with a busy routine who deeply value their time at home — whether for binge-watching a show, hosting friends, or pursuing personal interests like crafts, musical instruments, and ballet. The project starts from that apparent contradiction: a fast-paced life that needs, at home, a counterpoint of calm and identity.</p>
     <p>One of the project's most defining design decisions lies in the roof: we chose an inclined reinforced-concrete slab instead of a conventional flat solution. Beyond technically resolving water runoff, that slope allowed for a more generous ceiling height and a more stylish spatial result, giving the interior spaces a scale and character that a flat slab wouldn't have offered.</p>
+  </div>
+</section>
+
+<section class="ec-scrollanim" data-scrollanim>
+  <div class="ec-scrollanim-sticky">
+    <img class="ec-scrollanim-frame" data-scrollanim-frame alt="Casa Ham — isometric rotation">
+  </div>
+</section>
+
+<section class="ec-story-continued">
+  <div class="ec-story-media">
+    <img src="../uploads/casa-ham/capa.jpg" alt="Casa Ham — Facade">
+  </div>
+  <div class="ec-story-continued-text">
     <p>The house also had to balance transparency and privacy. With a facade composition that favors large glass window frames, and located in a neighborhood with heavy foot traffic during the day, the project required visual protection without giving up natural light. The solution came through brise-soleil screens on the front enclosure, which filter views from the street without turning the house into a closed box — the couple still faces the city, but on their own terms.</p>
     <p>Inside, the interior decoration followed a very particular criterion: instead of pieces chosen for aesthetics alone, we prioritized objects with sentimental value for the couple — turning the house into not just an architectural project, but a space that carries the story of the people who live in it.</p>
   </div>
@@ -329,13 +381,12 @@
   var PROJECT = 'Casa Ham';
 
   var IMAGES = [
-    { src: '../uploads/casa-ham/isometrico.jpg',              label: 'Isometric',              kind: 'story' },
-    { src: '../uploads/casa-ham/planta.png',                  label: 'Floor Plan',              kind: 'plan-top' },
-    { src: '../uploads/casa-ham/corte-a.jpg',                 label: 'Section A',               kind: 'corte', multiply: true },
-    { src: '../uploads/casa-ham/corte-b.jpg',                 label: 'Section B',               kind: 'corte', multiply: true },
-    { src: '../uploads/casa-ham/corte-1.jpg',                 label: 'Section 1',               kind: 'corte', multiply: true },
-    { src: '../uploads/casa-ham/corte-4.jpg',                 label: 'Section 4',               kind: 'corte', multiply: true },
-    { src: '../uploads/casa-ham/corte-isometrico.jpg',        label: 'Isometric Section',        kind: 'corte' },
+    { src: '../uploads/casa-ham/isometrico.jpg',              label: '',                       kind: 'story', multiply: true },
+    { src: '../uploads/casa-ham/planta.png',                  label: 'Floor Plan',              kind: 'plan-top', multiply: true },
+    { src: '../uploads/casa-ham/corte-b.png',                 label: 'Section B',               kind: 'corte', multiply: true },
+    { src: '../uploads/casa-ham/corte-1.png',                 label: 'Section 1',               kind: 'corte', multiply: true },
+    { src: '../uploads/casa-ham/corte-4.png',                 label: 'Section 4',               kind: 'corte', multiply: true, small: true },
+    { src: '../uploads/casa-ham/corte-isometrico.jpg',        label: 'Isometric Section',        kind: 'corte', multiply: true, half: true },
     { src: '../uploads/casa-ham/estar-ampla.jpg',      label: 'Spacious Living Room',  kind: 'photo' },
     { src: '../uploads/casa-ham/cozinha-jantar.jpg',   label: 'Kitchen and Dining Room', kind: 'photo' },
     { src: '../uploads/casa-ham/jantar-ampla.jpg',     label: 'Spacious Dining Room',  kind: 'photo' },
@@ -351,32 +402,42 @@
   var storyMedia = document.querySelector('[data-story-media]');
   var gallery    = document.querySelector('[data-gallery]');
 
-  IMAGES.forEach(function (item, i) {
-    var fig = document.createElement('button');
-    fig.type = 'button';
-    fig.setAttribute('data-index', String(i));
-    fig.setAttribute('aria-label', 'Open image: ' + (item.label || PROJECT));
+  var LIGHTBOX = [];
 
+  IMAGES.forEach(function (item) {
     if (item.kind === 'plan-top' || item.kind === 'corte' || item.kind === 'plan-bottom') {
-      fig.className = 'ec-tech-item' + (item.multiply ? ' ec-tech-item--multiply' : '');
-      fig.innerHTML =
+      var tech = document.createElement('div');
+      tech.className = 'ec-tech-item' + (item.multiply ? ' ec-tech-item--multiply' : '') + (item.half ? ' ec-tech-item--half' : '') + (item.small ? ' ec-tech-item--small' : '');
+      tech.innerHTML =
         '<img src="' + item.src + '" alt="' + PROJECT + (item.label ? ' — ' + item.label : '') + '" loading="lazy">' +
         (item.label ? '<span class="ec-media-label">' + item.label + '</span>' : '');
       var target = item.kind === 'plan-top' ? plansTop : item.kind === 'corte' ? cortes : plansBottom;
-      target.appendChild(fig);
-    } else if (item.kind === 'story') {
-      fig.className = 'ec-story-media-btn';
-      fig.innerHTML =
-        '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
-        '<span class="ec-media-label">' + item.label + '</span>';
-      storyMedia.appendChild(fig);
-    } else {
-      fig.className = 'ec-grid-item';
-      fig.innerHTML =
-        '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
-        '<span class="ec-grid-label">' + item.label + '</span>';
-      gallery.appendChild(fig);
+      target.appendChild(tech);
+      return;
     }
+
+    if (item.kind === 'story') {
+      var story = document.createElement('div');
+      story.className = 'ec-story-media-btn' + (item.multiply ? ' ec-story-media-btn--multiply' : '');
+      story.innerHTML =
+        '<img src="' + item.src + '" alt="' + PROJECT + (item.label ? ' — ' + item.label : '') + '" loading="lazy">' +
+        (item.label ? '<span class="ec-media-label">' + item.label + '</span>' : '');
+      storyMedia.appendChild(story);
+      return;
+    }
+
+    var index = LIGHTBOX.length;
+    LIGHTBOX.push(item);
+
+    var fig = document.createElement('button');
+    fig.type = 'button';
+    fig.setAttribute('data-index', String(index));
+    fig.setAttribute('aria-label', 'Open image: ' + (item.label || PROJECT));
+    fig.className = 'ec-grid-item';
+    fig.innerHTML =
+      '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
+      '<span class="ec-grid-label">' + item.label + '</span>';
+    gallery.appendChild(fig);
   });
 
   var lightbox      = document.querySelector('[data-lightbox]');
@@ -398,15 +459,15 @@
   }
 
   function render() {
-    var item = IMAGES[current];
+    var item = LIGHTBOX[current];
     lightboxImg.src = item.src;
     lightboxImg.alt = PROJECT + (item.label ? ' — ' + item.label : '');
     lightboxCap.textContent = item.label;
-    lightboxCount.textContent = (current + 1) + ' / ' + IMAGES.length;
+    lightboxCount.textContent = (current + 1) + ' / ' + LIGHTBOX.length;
   }
 
   function step(delta) {
-    current = (current + delta + IMAGES.length) % IMAGES.length;
+    current = (current + delta + LIGHTBOX.length) % LIGHTBOX.length;
     render();
   }
 
@@ -415,10 +476,6 @@
     if (!btn) return;
     openLightbox(Number(btn.getAttribute('data-index')));
   }
-  plansTop.addEventListener('click', onGalleryClick);
-  cortes.addEventListener('click', onGalleryClick);
-  plansBottom.addEventListener('click', onGalleryClick);
-  storyMedia.addEventListener('click', onGalleryClick);
   gallery.addEventListener('click', onGalleryClick);
 
   document.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
@@ -456,6 +513,83 @@
       if (e.key === 'Escape' && navLinks.classList.contains('is-open')) setMenuOpen(false);
     });
   }
+})();
+
+(function () {
+  'use strict';
+
+  var wrapper = document.querySelector('[data-scrollanim]');
+  if (!wrapper) return;
+
+  var frameImg = wrapper.querySelector('[data-scrollanim-frame]');
+
+  var FRAME_COUNT = 193;
+
+  function framePath(i) {
+    return '../uploads/casa-ham/animacao/frame-' + String(i).padStart(3, '0') + '.webp';
+  }
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var frames = new Array(FRAME_COUNT + 1);
+  var currentFrame = 1;
+
+  function loadFrame(i) {
+    if (frames[i]) return frames[i];
+    var img = new Image();
+    img.decoding = 'async';
+    img.src = framePath(i);
+    frames[i] = img;
+    return img;
+  }
+
+  function showFrame(index) {
+    currentFrame = index;
+    frameImg.src = loadFrame(index).src;
+  }
+
+  function preloadAll() {
+    for (var i = 1; i <= FRAME_COUNT; i++) loadFrame(i);
+  }
+
+  showFrame(1);
+
+  if (reduced) {
+    wrapper.classList.add('is-static');
+    return;
+  }
+
+  function onScroll() {
+    var rect = wrapper.getBoundingClientRect();
+    var total = rect.height - window.innerHeight;
+    if (total <= 0) return;
+    var scrolled = -rect.top;
+    var progress = Math.min(1, Math.max(0, scrolled / total));
+    var index = Math.min(FRAME_COUNT, Math.max(1, Math.round(progress * (FRAME_COUNT - 1)) + 1));
+    if (index !== currentFrame) showFrame(index);
+  }
+
+  var ticking = false;
+  function requestTick() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      onScroll();
+      ticking = false;
+    });
+  }
+
+  var started = false;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && !started) {
+        started = true;
+        preloadAll();
+      }
+    });
+  }, { rootMargin: '150% 0px' });
+  io.observe(wrapper);
+
+  window.addEventListener('scroll', requestTick, { passive: true });
 })();
 </script>
 

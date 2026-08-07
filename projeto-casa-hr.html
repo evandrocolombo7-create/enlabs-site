@@ -82,13 +82,14 @@
 
   .ec-plans{
     max-width:var(--content-max);margin:0 auto;padding:0 var(--content-pad) var(--space-8);
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));justify-items:center;gap:16px;
   }
   .ec-plan-card{
-    background:#F4F4F2;border:none;padding:0;cursor:pointer;
+    width:90%;background:#F4F4F2;border:none;padding:0;cursor:default;
     display:flex;flex-direction:column;text-align:left;overflow:hidden;
   }
   .ec-plan-card img{width:100%;height:auto;display:block;}
+  .ec-plan-card--multiply img{mix-blend-mode:multiply;}
   .ec-plan-label{
     padding:14px 18px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#4D4D4D;
   }
@@ -280,17 +281,31 @@
   var plans   = document.querySelector('[data-plans]');
   var gallery = document.querySelector('[data-gallery]');
 
-  IMAGES.forEach(function (item, i) {
-    var isPlan = item.kind === 'plan';
+  var LIGHTBOX = [];
+
+  IMAGES.forEach(function (item) {
+    if (item.kind === 'plan') {
+      var card = document.createElement('div');
+      card.className = 'ec-plan-card ec-plan-card--multiply';
+      card.innerHTML =
+        '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
+        '<span class="ec-plan-label">' + item.label + '</span>';
+      plans.appendChild(card);
+      return;
+    }
+
+    var index = LIGHTBOX.length;
+    LIGHTBOX.push(item);
+
     var fig = document.createElement('button');
-    fig.className = isPlan ? 'ec-plan-card' : 'ec-grid-item';
+    fig.className = 'ec-grid-item';
     fig.type = 'button';
-    fig.setAttribute('data-index', String(i));
+    fig.setAttribute('data-index', String(index));
     fig.setAttribute('aria-label', 'Abrir imagem: ' + item.label);
     fig.innerHTML =
       '<img src="' + item.src + '" alt="' + PROJECT + ' — ' + item.label + '" loading="lazy">' +
-      '<span class="' + (isPlan ? 'ec-plan-label' : 'ec-grid-label') + '">' + item.label + '</span>';
-    (isPlan ? plans : gallery).appendChild(fig);
+      '<span class="ec-grid-label">' + item.label + '</span>';
+    gallery.appendChild(fig);
   });
 
   var lightbox      = document.querySelector('[data-lightbox]');
@@ -312,15 +327,15 @@
   }
 
   function render() {
-    var item = IMAGES[current];
+    var item = LIGHTBOX[current];
     lightboxImg.src = item.src;
     lightboxImg.alt = PROJECT + ' — ' + item.label;
     lightboxCap.textContent = item.label;
-    lightboxCount.textContent = (current + 1) + ' / ' + IMAGES.length;
+    lightboxCount.textContent = (current + 1) + ' / ' + LIGHTBOX.length;
   }
 
   function step(delta) {
-    current = (current + delta + IMAGES.length) % IMAGES.length;
+    current = (current + delta + LIGHTBOX.length) % LIGHTBOX.length;
     render();
   }
 
@@ -329,7 +344,6 @@
     if (!btn) return;
     openLightbox(Number(btn.getAttribute('data-index')));
   }
-  plans.addEventListener('click', onGalleryClick);
   gallery.addEventListener('click', onGalleryClick);
 
   document.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
