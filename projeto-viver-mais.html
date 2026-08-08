@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viver Mais — Archviz | Evandro Colombo</title>
+<meta name="description" content="Galeria completa do projeto Viver Mais, Quinta do Lago — renders de archviz por Evandro Colombo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#0A0A0A;
+    --paper:#FAFAFA;
+    --gray-600:#4D4D4D;
+    --gray-400:#8C8C8C;
+    --content-max:1400px;
+    --content-pad:clamp(20px,5vw,72px);
+    --space-8:64px;
+    --tracking-caption:0.1em;
+    --ease-standard:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--ink);}
+  body{font-family:'Jost','Century Gothic',-apple-system,'Segoe UI',sans-serif;color:var(--paper);width:100%;}
+  a{color:var(--paper);text-decoration:none;}
+  a:hover{color:#B0B0B0;}
+  button{font-family:inherit;}
+
+  .ec-nav{
+    position:fixed;top:0;left:0;width:100%;z-index:50;
+    display:flex;justify-content:center;
+    padding:22px clamp(24px,6vw,96px);
+  }
+  .ec-nav-links{display:flex;gap:clamp(20px,4vw,48px);}
+  .ec-nav a{
+    font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#D8D8D8;
+    padding-bottom:6px;border-bottom:1px solid transparent;
+    transition:color .3s ease,border-color .3s ease;
+  }
+  .ec-nav a:hover{color:var(--paper);border-bottom-color:var(--paper);}
+  .ec-nav a.is-active{color:var(--paper);border-bottom-color:var(--paper);}
+  .ec-nav-toggle{display:none;}
+
+  /* ---------- language switch ---------- */
+  .ec-lang{
+    position:fixed;top:24px;right:clamp(24px,6vw,96px);z-index:51;
+    display:flex;align-items:center;gap:6px;
+    font-size:11px;letter-spacing:0.12em;
+  }
+  .ec-lang a{color:var(--gray-400);transition:color .3s ease;}
+  .ec-lang a:hover{color:var(--paper);}
+  .ec-lang .is-current{color:var(--paper);}
+  .ec-lang-sep{color:#3A3A3A;}
+
+  .ec-page-header{
+    max-width:var(--content-max);margin:0 auto;
+    padding:104px var(--content-pad) 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    flex-wrap:wrap;
+  }
+  .ec-page-title{
+    font-family:inherit;font-weight:500;font-size:14px;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--paper);margin:0;
+  }
+
+  .ec-back{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:10px 18px;border:1px solid rgba(250,250,250,0.3);
+    color:var(--paper);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+    transition:background .3s ease,color .3s ease;
+  }
+  .ec-back:hover{background:var(--paper);color:var(--ink);}
+  .ec-back svg{flex:none;}
+  .ec-back:hover svg path{stroke:var(--ink);}
+
+  .ec-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    max-width:var(--content-max);margin:0 auto;padding:0 var(--content-pad);
+    gap:2px;
+  }
+  .ec-grid-item{
+    position:relative;aspect-ratio:4/5;overflow:hidden;display:block;
+    background:#141414;border:none;padding:0;cursor:pointer;
+  }
+  .ec-grid-item img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .5s var(--ease-standard);display:block;
+  }
+  .ec-grid-item:hover img{transform:scale(1.03);}
+  .ec-grid-label{
+    position:absolute;bottom:16px;left:16px;font-size:12px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--paper);pointer-events:none;
+    text-shadow:0 1px 6px rgba(0,0,0,0.6);
+  }
+
+  @media (max-width:820px){
+    .ec-grid{grid-template-columns:repeat(2,1fr);}
+
+    .ec-nav-toggle{
+      display:flex;flex-direction:column;justify-content:center;gap:5px;
+      position:fixed;top:20px;right:20px;z-index:61;
+      width:36px;height:36px;padding:0;
+      background:transparent;border:none;cursor:pointer;
+    }
+    .ec-nav-toggle span{
+      display:block;width:100%;height:1.5px;background:var(--paper);
+      transition:transform .25s ease,opacity .25s ease;
+    }
+    .ec-nav-toggle.is-open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .ec-nav-toggle.is-open span:nth-child(2){opacity:0;}
+    .ec-nav-toggle.is-open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+    .ec-nav-links{
+      position:fixed;inset:0;z-index:60;
+      flex-direction:column;align-items:center;justify-content:center;gap:28px;
+      background:rgba(10,10,10,0.98);
+      opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity .25s ease;
+    }
+    .ec-nav-links.is-open{opacity:1;visibility:visible;pointer-events:auto;}
+    .ec-nav-links a{font-size:15px;}
+
+    .ec-lang{top:22px;left:20px;right:auto;}
+  }
+  @media (max-width:480px){
+    .ec-grid{grid-template-columns:1fr;}
+  }
+
+  .ec-footer{padding:var(--space-8) var(--content-pad);text-align:center;}
+  .ec-footer span{
+    font-size:12px;letter-spacing:var(--tracking-caption);
+    text-transform:uppercase;color:var(--gray-400);
+  }
+
+  /* ---------- lightbox ---------- */
+  .ec-lightbox{
+    position:fixed;inset:0;z-index:100;background:rgba(6,6,6,0.96);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;transition:opacity .25s ease;
+  }
+  .ec-lightbox.is-open{opacity:1;visibility:visible;}
+  .ec-lightbox-figure{
+    position:relative;max-width:min(92vw,1400px);max-height:88vh;
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+  }
+  .ec-lightbox-img{
+    max-width:92vw;max-height:80vh;width:auto;height:auto;
+    object-fit:contain;display:block;
+  }
+  .ec-lightbox-caption{
+    font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#D8D8D8;
+  }
+  .ec-lightbox-close,
+  .ec-lightbox-prev,
+  .ec-lightbox-next{
+    position:fixed;background:transparent;border:none;color:var(--paper);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    opacity:0.75;transition:opacity .2s ease;
+  }
+  .ec-lightbox-close:hover,
+  .ec-lightbox-prev:hover,
+  .ec-lightbox-next:hover{opacity:1;}
+  .ec-lightbox-close{top:20px;right:clamp(16px,4vw,40px);width:40px;height:40px;}
+  .ec-lightbox-prev{left:clamp(8px,3vw,32px);top:50%;transform:translateY(-50%);width:56px;height:56px;}
+  .ec-lightbox-next{right:clamp(8px,3vw,32px);top:50%;transform:translateY(-50%);width:56px;height:56px;}
+  .ec-lightbox-count{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    font-size:12px;letter-spacing:0.1em;color:var(--gray-400);
+  }
+</style>
+</head>
+<body>
+
+<nav class="ec-nav">
+  <div class="ec-nav-links" data-nav-links>
+    <a href="index.html#home">Home</a>
+    <a href="visualizacao.html" class="is-active">Archviz</a>
+    <a href="arquitetura.html">Arquitetura</a>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="ec-lang">
+  <span class="is-current">PT</span>
+  <span class="ec-lang-sep">/</span>
+  <a href="en/projeto-viver-mais.html">EN</a>
+</div>
+
+<header class="ec-page-header">
+  <a class="ec-back" href="visualizacao.html">
+    <svg width="14" height="12" viewBox="0 0 16 14" fill="none"><path d="M7 1L1 7L7 13M1 7H15" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Voltar ao portfólio
+  </a>
+  <h1 class="ec-page-title">VIVER MAIS</h1>
+</header>
+
+<div class="ec-grid" data-gallery></div>
+
+<footer class="ec-footer">
+  <span>evandrocolombo</span>
+</footer>
+
+<div class="ec-lightbox" data-lightbox>
+  <button class="ec-lightbox-close" data-lightbox-close aria-label="Fechar">
+    <svg width="22" height="22" viewBox="0 0 20 20" fill="none"><path d="M1 1L19 19M19 1L1 19" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+  <button class="ec-lightbox-prev" data-lightbox-prev aria-label="Anterior">
+    <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M12 1L2 12L12 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button class="ec-lightbox-next" data-lightbox-next aria-label="Próxima">
+    <svg width="14" height="24" viewBox="0 0 14 24" fill="none"><path d="M2 1L12 12L2 23" stroke="#FAFAFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <figure class="ec-lightbox-figure">
+    <img class="ec-lightbox-img" data-lightbox-img src="" alt="">
+    <figcaption class="ec-lightbox-caption" data-lightbox-caption></figcaption>
+  </figure>
+  <div class="ec-lightbox-count" data-lightbox-count></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var IMAGES = [
+    { src: 'uploads/viver-mais/capa.jpg',                 label: 'Fachada' },
+    { src: 'uploads/viver-mais/implantacao.jpg',           label: 'Implantação' },
+    { src: 'uploads/viver-mais/piscina-adulto.jpg',        label: 'Piscina Adulto' },
+    { src: 'uploads/viver-mais/piscina-infantil.jpg',      label: 'Piscina Infantil' },
+    { src: 'uploads/viver-mais/piscina-detalhe.jpg',       label: 'Piscina (detalhe)' },
+    { src: 'uploads/viver-mais/ofuro.jpg',                 label: 'Ofuro' },
+    { src: 'uploads/viver-mais/sauna-seca.jpg',            label: 'Sauna Seca' },
+    { src: 'uploads/viver-mais/sauna-umida.jpg',           label: 'Sauna Úmida' },
+    { src: 'uploads/viver-mais/quadra-poliesportiva.jpg',  label: 'Quadra Poliesportiva' },
+    { src: 'uploads/viver-mais/quadra-beach.jpg',          label: 'Quadra Beach Tennis' },
+    { src: 'uploads/viver-mais/academia.jpg',               label: 'Academia' },
+    { src: 'uploads/viver-mais/pista-caminhada.jpg',        label: 'Pista de Caminhada' },
+    { src: 'uploads/viver-mais/portaria.jpg',                label: 'Portaria' },
+    { src: 'uploads/viver-mais/quintal.jpg',                 label: 'Quintal' }
+  ];
+
+  var gallery = document.querySelector('[data-gallery]');
+  IMAGES.forEach(function (item, i) {
+    var fig = document.createElement('button');
+    fig.className = 'ec-grid-item';
+    fig.type = 'button';
+    fig.setAttribute('data-index', String(i));
+    fig.setAttribute('aria-label', 'Abrir imagem: ' + item.label);
+    fig.innerHTML =
+      '<img src="' + item.src + '" alt="Viver Mais — ' + item.label + '" loading="lazy">' +
+      '<span class="ec-grid-label">' + item.label + '</span>';
+    gallery.appendChild(fig);
+  });
+
+  var lightbox     = document.querySelector('[data-lightbox]');
+  var lightboxImg   = document.querySelector('[data-lightbox-img]');
+  var lightboxCap   = document.querySelector('[data-lightbox-caption]');
+  var lightboxCount = document.querySelector('[data-lightbox-count]');
+  var current = 0;
+
+  function openLightbox(index) {
+    current = index;
+    render();
+    lightbox.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function render() {
+    var item = IMAGES[current];
+    lightboxImg.src = item.src;
+    lightboxImg.alt = 'Viver Mais — ' + item.label;
+    lightboxCap.textContent = item.label;
+    lightboxCount.textContent = (current + 1) + ' / ' + IMAGES.length;
+  }
+
+  function step(delta) {
+    current = (current + delta + IMAGES.length) % IMAGES.length;
+    render();
+  }
+
+  gallery.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-index]');
+    if (!btn) return;
+    openLightbox(Number(btn.getAttribute('data-index')));
+  });
+
+  document.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
+  document.querySelector('[data-lightbox-prev]').addEventListener('click', function () { step(-1); });
+  document.querySelector('[data-lightbox-next]').addEventListener('click', function () { step(1); });
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  window.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
+
+  /* ---------- mobile hamburger menu ---------- */
+  var navToggle = document.querySelector('[data-nav-toggle]');
+  var navLinks  = document.querySelector('[data-nav-links]');
+  if (navToggle && navLinks) {
+    var setMenuOpen = function (isOpen) {
+      navLinks.classList.toggle('is-open', isOpen);
+      navToggle.classList.toggle('is-open', isOpen);
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    };
+    navToggle.addEventListener('click', function () {
+      setMenuOpen(!navLinks.classList.contains('is-open'));
+    });
+    navLinks.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') setMenuOpen(false);
+    });
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && navLinks.classList.contains('is-open')) setMenuOpen(false);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
