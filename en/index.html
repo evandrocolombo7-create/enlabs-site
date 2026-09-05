@@ -97,9 +97,9 @@
 
   /* ---------- overlays: work / about / contact ---------- */
   .ec-overlay{position:absolute;inset:0;opacity:0;pointer-events:none;background:#0A0A0A;}
-  .ec-overlay--work{z-index:4;}
+  .ec-overlay--work{z-index:4;background:transparent;}
   .ec-overlay--about{z-index:5;}
-  .ec-overlay--contact{z-index:6;}
+  .ec-overlay--contact{z-index:6;background:transparent;}
   .ec-overlay-img{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     object-position:center 25%;filter:grayscale(1) contrast(1.05);
@@ -363,7 +363,7 @@ At EnLabs, visualization is understood as part of the design process itself — 
       logoEl.style.opacity = showLogo ? '1' : '0';
       logoEl.style.transform = 'none';
 
-      heroLayer.style.opacity = tp0 > 0.5 ? '0' : '1';
+      heroLayer.style.opacity = tp1 > 0.5 ? '0' : '1';
       workOverlay.style.opacity = tp0 > 0.5 ? '1' : '0';
       workOverlay.style.pointerEvents = tp0 > 0.5 ? 'auto' : 'none';
       workText.style.transform = 'none';
@@ -386,9 +386,12 @@ At EnLabs, visualization is understood as part of the design process itself — 
     logoEl.style.opacity = String(1 - lp);
     logoEl.style.transform = 'translateY(' + (-40 * lp) + 'px)';
 
+    // hero stays visible (same slideshow) through the work dwell,
+    // and only fades out on the work → about transition
+    heroLayer.style.opacity = String(1 - tp1);
+    heroLayer.style.transform = 'translateY(' + (-70 * tp1) + 'px)';
+
     // hero → work
-    heroLayer.style.opacity = String(1 - tp0);
-    heroLayer.style.transform = 'translateY(' + (-70 * tp0) + 'px)';
     workOverlay.style.opacity = String(tp0);
     workOverlay.style.pointerEvents = tp0 > 0.4 ? 'auto' : 'none';
     workText.style.transform = 'translateY(' + (40 * (1 - tp0)) + 'px)';

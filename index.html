@@ -97,9 +97,9 @@
 
   /* ---------- overlays: trabalho / sobre / contato ---------- */
   .ec-overlay{position:absolute;inset:0;opacity:0;pointer-events:none;background:#0A0A0A;}
-  .ec-overlay--trabalho{z-index:4;}
+  .ec-overlay--trabalho{z-index:4;background:transparent;}
   .ec-overlay--sobre{z-index:5;}
-  .ec-overlay--contato{z-index:6;}
+  .ec-overlay--contato{z-index:6;background:transparent;}
   .ec-overlay-img{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
     object-position:center 25%;filter:grayscale(1) contrast(1.05);
@@ -363,7 +363,7 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
       logoEl.style.opacity = showLogo ? '1' : '0';
       logoEl.style.transform = 'none';
 
-      heroLayer.style.opacity = tp0 > 0.5 ? '0' : '1';
+      heroLayer.style.opacity = tp1 > 0.5 ? '0' : '1';
       trabalhoOverlay.style.opacity = tp0 > 0.5 ? '1' : '0';
       trabalhoOverlay.style.pointerEvents = tp0 > 0.5 ? 'auto' : 'none';
       trabalhoText.style.transform = 'none';
@@ -386,9 +386,12 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
     logoEl.style.opacity = String(1 - lp);
     logoEl.style.transform = 'translateY(' + (-40 * lp) + 'px)';
 
+    // hero stays visible (same slideshow) through the trabalho dwell,
+    // and only fades out on the trabalho → sobre transition
+    heroLayer.style.opacity = String(1 - tp1);
+    heroLayer.style.transform = 'translateY(' + (-70 * tp1) + 'px)';
+
     // hero → trabalho
-    heroLayer.style.opacity = String(1 - tp0);
-    heroLayer.style.transform = 'translateY(' + (-70 * tp0) + 'px)';
     trabalhoOverlay.style.opacity = String(tp0);
     trabalhoOverlay.style.pointerEvents = tp0 > 0.4 ? 'auto' : 'none';
     trabalhoText.style.transform = 'translateY(' + (40 * (1 - tp0)) + 'px)';
