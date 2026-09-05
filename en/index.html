@@ -122,13 +122,13 @@
 
   /* ---------- work: horizontal project scroller ---------- */
   .ec-work-scroll{
-    display:flex;gap:24px;width:100%;overflow-x:auto;padding-bottom:16px;
+    display:flex;gap:14px;width:100%;overflow-x:auto;padding-bottom:16px;
     -webkit-overflow-scrolling:touch;scrollbar-color:rgba(250,250,250,0.3) transparent;
   }
   .ec-work-scroll::-webkit-scrollbar{height:6px;}
   .ec-work-scroll::-webkit-scrollbar-thumb{background:rgba(250,250,250,0.25);border-radius:3px;}
   .ec-work-item{
-    position:relative;flex:0 0 auto;width:clamp(240px,28vw,360px);aspect-ratio:4/3;
+    position:relative;flex:0 0 auto;width:clamp(300px,32vw,460px);aspect-ratio:4/3;
     overflow:hidden;display:block;
   }
   .ec-work-item img{
@@ -195,6 +195,9 @@
 
     /* logo + scroll arrows: stack instead of cramming side by side */
     .ec-logo-row{flex-direction:column;gap:20px;}
+
+    /* work: bigger single-card thumbs on mobile */
+    .ec-work-item{width:80vw;}
 
     /* work / about / contact: align to top, tighten spacing, and allow internal scroll instead of hard-clipping long text */
     .ec-overlay-inner{
