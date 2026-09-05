@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Enlabs — Estúdio ArchViz</title>
-<meta name="description" content="Portfólio do Enlabs, estúdio de visualização arquitetônica (archviz) e CGI.">
+<title>Enlabs CGI para Arquitetura e Empreendimentos</title>
+<meta name="description" content="Portfólio do Enlabs CGI para Arquitetura e Empreendimentos, estúdio de visualização arquitetônica (archviz).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&display=swap">
@@ -45,11 +45,11 @@
   .ec-lang-sep{color:#5A5A5A;}
 
   /* ---------- scroll stage ---------- */
-  .ec-stage{position:relative;height:680vh;}
+  .ec-stage{position:relative;height:600vh;}
   .ec-anchor{position:absolute;height:1px;width:1px;}
-  #trabalho{top:200vh;}
-  #sobre{top:360vh;}
-  #contato{top:520vh;}
+  #trabalho{top:110vh;}
+  #sobre{top:270vh;}
+  #contato{top:450vh;}
   .ec-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;}
 
   /* ---------- hero ---------- */
@@ -250,7 +250,7 @@
           <div class="ec-logo-row">
             <div class="ec-logo-block">
               <h1 class="ec-logo" aria-label="enlabs"><span class="ec-logo-letter" style="animation-delay:0.00s;">e</span><span class="ec-logo-letter" style="animation-delay:0.26s;">n</span><span class="ec-logo-letter" style="animation-delay:0.03s;">l</span><span class="ec-logo-letter" style="animation-delay:0.29s;">a</span><span class="ec-logo-letter" style="animation-delay:0.31s;">b</span><span class="ec-logo-letter" style="animation-delay:0.34s;">s</span></h1>
-              <p class="ec-tagline">Estúdio ArchViz</p>
+              <p class="ec-tagline">CGI para Arquitetura e Empreendimentos</p>
             </div>
             <div class="ec-arrows" aria-hidden="true">
               <svg class="ec-scroll-arrow" style="animation-delay:0s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -293,7 +293,7 @@
         <div class="ec-overlay-scrim"></div>
         <div class="ec-overlay-inner" data-sobre-text>
           <span class="ec-overlay-title">Sobre</span>
-          <h2 class="ec-sobre-body">A EnLabs é um estúdio de visualização arquitetônica que trabalha na fronteira entre o projeto e a imagem.
+          <h2 class="ec-sobre-body">A Enlabs CGI para Arquitetura e Empreendimentos é um estúdio de visualização arquitetônica que trabalha na fronteira entre o projeto e a imagem.
 
 Fundado por Evandro Colombo, arquiteto e artista 3D formado em Arquitetura e Urbanismo pela UNIMAR, o estúdio nasceu de uma trajetória que passou pelo projeto executivo, pelo canteiro de obras e pelo BIM antes de se voltar inteiramente à visualização. Essa bagagem define o jeito de trabalhar da EnLabs: todo projeto começa pela leitura da própria arquitetura, suas plantas, proporções e intenções, não apenas da geometria a ser renderizada.
 
@@ -354,9 +354,9 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
     var vh = window.innerHeight || 1;
     var progress = clamp01(window.scrollY / vh);
 
-    var tp0 = clamp01((window.scrollY - vh * 1.6) / (vh * 0.4));
-    var tp1 = clamp01((window.scrollY - vh * 3.2) / (vh * 0.4));
-    var tp2 = clamp01((window.scrollY - vh * 4.8) / (vh * 0.4));
+    var tp0 = clamp01((window.scrollY - vh * 0.5) / (vh * 0.6));
+    var tp1 = clamp01((window.scrollY - vh * 2.1) / (vh * 0.6));
+    var tp2 = clamp01((window.scrollY - vh * 3.9) / (vh * 0.6));
 
     if (reducedMotion) {
       var showLogo = progress < 0.5;
@@ -380,8 +380,9 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
       return;
     }
 
-    // logo fades out over the first 45% of a viewport of scroll
-    var lp = clamp01(progress / 0.45);
+    // logo fades out over the first 50% of a viewport of scroll,
+    // handing off straight into the hero → trabalho transition
+    var lp = clamp01(progress / 0.5);
     logoEl.style.opacity = String(1 - lp);
     logoEl.style.transform = 'translateY(' + (-40 * lp) + 'px)';
 
