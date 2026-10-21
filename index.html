@@ -3,220 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Enlabs CGI para Arquitetura e Empreendimentos</title>
-<meta name="description" content="Portfólio do Enlabs CGI para Arquitetura e Empreendimentos, estúdio de visualização arquitetônica (archviz).">
+<title>enlabs CGI para Arquitetura e Empreendimentos</title>
+<meta name="description" content="Portfólio do enlabs CGI para Arquitetura e Empreendimentos, estúdio de visualização arquitetônica (archviz).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600&display=swap">
-<style>
-  *{box-sizing:border-box;}
-  body{margin:0;padding:0;background:#0A0A0A;overflow-x:hidden;}
-  a{color:inherit;text-decoration:none;}
-
-  #home{
-    font-family:'Jost','Century Gothic',-apple-system,'Segoe UI',sans-serif;
-    background:#0A0A0A;color:#FAFAFA;width:100%;
-  }
-
-  /* ---------- nav ---------- */
-  .ec-nav{
-    position:fixed;top:0;left:0;width:100%;z-index:20;
-    display:flex;justify-content:center;
-    padding:22px clamp(24px,6vw,96px);
-  }
-  .ec-nav-links{display:flex;gap:clamp(20px,4vw,48px);}
-  .ec-nav a{
-    font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#D8D8D8;
-    padding-bottom:6px;border-bottom:1px solid transparent;
-    transition:color .3s ease,border-color .3s ease;
-  }
-  .ec-nav a:hover{color:#FAFAFA;border-bottom-color:#FAFAFA;}
-  .ec-nav-toggle{display:none;}
-
-  /* ---------- language switch ---------- */
-  .ec-lang{
-    position:fixed;top:24px;right:clamp(24px,6vw,96px);z-index:22;
-    display:flex;align-items:center;gap:6px;
-    font-size:11px;letter-spacing:0.12em;
-  }
-  .ec-lang a{color:#8C8C8C;transition:color .3s ease;}
-  .ec-lang a:hover{color:#FAFAFA;}
-  .ec-lang .is-current{color:#FAFAFA;}
-  .ec-lang-sep{color:#5A5A5A;}
-
-  /* ---------- scroll stage ---------- */
-  .ec-stage{position:relative;height:600vh;}
-  .ec-anchor{position:absolute;height:1px;width:1px;}
-  #trabalho{top:110vh;}
-  #sobre{top:270vh;}
-  #contato{top:450vh;}
-  .ec-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;}
-
-  /* ---------- hero ---------- */
-  .ec-hero{position:absolute;inset:0;}
-  .ec-slide{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    filter:saturate(0.35) contrast(1.02);
-    opacity:0;transition:opacity 1.4s ease;
-  }
-  .ec-slide.is-active{opacity:1;}
-  .ec-hero-scrim{position:absolute;inset:0;background:rgba(10,10,10,0.62);}
-
-  .ec-logo-layer{
-    position:absolute;inset:0;z-index:2;
-    display:flex;align-items:center;justify-content:center;pointer-events:none;
-  }
-  .ec-logo-row{display:flex;align-items:center;gap:clamp(20px,3vw,40px);}
-  .ec-logo-block{text-align:center;}
-  .ec-logo{
-    margin:0;font-family:inherit;font-weight:400;
-    font-size:clamp(36px,7vw,88px);letter-spacing:0;color:#FAFAFA;text-align:center;
-  }
-  .ec-tagline{
-    margin:14px 0 0;font-weight:300;font-size:clamp(13px,1.3vw,17px);
-    letter-spacing:0.14em;text-transform:uppercase;color:#B0B0B0;
-  }
-
-  @keyframes letterIn{
-    from{opacity:0;filter:blur(8px);transform:translateY(10px);}
-    to{opacity:1;filter:blur(0);transform:translateY(0);}
-  }
-  .ec-logo-letter{
-    display:inline-block;
-    animation:letterIn 0.6s cubic-bezier(.22,.61,.36,1) both;
-  }
-
-  .ec-arrows{display:flex;flex-direction:column;align-items:center;gap:6px;}
-  @keyframes scrollArrowGlow{0%,100%{opacity:0.18;}50%{opacity:1;}}
-  .ec-scroll-arrow{animation:scrollArrowGlow 1.8s ease-in-out infinite;}
-
-  @media (prefers-reduced-motion: reduce){
-    .ec-logo-letter{animation:none !important;opacity:1 !important;filter:none !important;transform:none !important;}
-    .ec-scroll-arrow{animation:none !important;opacity:0.6 !important;}
-  }
-
-  /* ---------- overlays: trabalho / sobre / contato ---------- */
-  .ec-overlay{position:absolute;inset:0;opacity:0;pointer-events:none;background:#0A0A0A;}
-  .ec-overlay--trabalho{z-index:4;background:transparent;}
-  .ec-overlay--sobre{z-index:5;}
-  .ec-overlay--contato{z-index:6;background:transparent;}
-  .ec-overlay-img{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    object-position:center 25%;filter:grayscale(1) contrast(1.05);
-  }
-  .ec-overlay-scrim{position:absolute;inset:0;background:rgba(10,10,10,0.55);}
-  .ec-overlay-inner{
-    position:relative;z-index:1;max-width:1400px;margin:0 auto;
-    padding:0 clamp(24px,6vw,96px);width:100%;height:100%;
-    display:flex;flex-direction:column;justify-content:center;
-  }
-  .ec-overlay-title{
-    font-size:clamp(28px,4.6vw,58px);font-weight:200;letter-spacing:0.01em;
-    text-transform:uppercase;color:#FAFAFA;display:block;margin-bottom:28px;
-  }
-
-  .ec-sobre-body{
-    margin:0 0 24px;font-family:inherit;font-weight:400;font-size:15px;line-height:1.8;
-    color:#D8D8D8;max-width:56ch;white-space:pre-line;
-  }
-
-  /* ---------- trabalho: horizontal project scroller ---------- */
-  .ec-trabalho-scroll{
-    display:flex;gap:14px;width:100%;overflow-x:auto;padding-bottom:16px;
-    -webkit-overflow-scrolling:touch;scrollbar-color:rgba(250,250,250,0.3) transparent;
-  }
-  .ec-trabalho-scroll::-webkit-scrollbar{height:6px;}
-  .ec-trabalho-scroll::-webkit-scrollbar-thumb{background:rgba(250,250,250,0.25);border-radius:3px;}
-  .ec-trabalho-item{
-    position:relative;flex:0 0 auto;width:clamp(300px,32vw,460px);aspect-ratio:4/3;
-    overflow:hidden;display:block;
-  }
-  .ec-trabalho-item img{
-    width:100%;height:100%;object-fit:cover;
-    filter:grayscale(1) contrast(1.05);
-    transition:filter .4s ease,transform .4s ease;
-  }
-  .ec-trabalho-item:hover img{filter:grayscale(0) contrast(1.05);transform:scale(1.04);}
-  .ec-trabalho-label{
-    position:absolute;left:16px;bottom:14px;
-    font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#FAFAFA;
-    text-shadow:0 2px 10px rgba(0,0,0,0.65);
-  }
-
-  .ec-contato-body{
-    margin:0 0 32px;font-family:inherit;font-weight:400;
-    font-size:clamp(18px,2.2vw,28px);line-height:1.35;letter-spacing:0.005em;
-    max-width:32ch;color:#FAFAFA;
-  }
-  .ec-cv{
-    display:inline-flex;align-items:center;gap:12px;padding:16px 32px;
-    border:1px solid rgba(250,250,250,0.3);color:#FAFAFA;
-    font-size:13px;letter-spacing:0.15em;text-transform:uppercase;
-    transition:background .3s ease,color .3s ease;
-    margin-bottom:40px;width:fit-content;
-  }
-  .ec-cv:hover{background:#FAFAFA;color:#0A0A0A;}
-  .ec-socials{
-    display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,48px);
-    border-top:1px solid rgba(250,250,250,0.2);padding-top:32px;
-  }
-  .ec-socials a{
-    position:relative;font-size:14px;letter-spacing:0.1em;text-transform:uppercase;
-    color:#D8D8D8;padding-bottom:8px;border-bottom:1px solid transparent;
-    transition:color .3s ease,border-color .3s ease;
-  }
-  .ec-socials a:hover{color:#FAFAFA;border-bottom-color:#FAFAFA;}
-
-  /* ---------- mobile (<=820px) ---------- */
-  @media (max-width:820px){
-    .ec-nav-toggle{
-      display:flex;flex-direction:column;justify-content:center;gap:5px;
-      position:fixed;top:20px;right:20px;z-index:61;
-      width:36px;height:36px;padding:0;
-      background:transparent;border:none;cursor:pointer;
-    }
-    .ec-nav-toggle span{
-      display:block;width:100%;height:1.5px;background:#FAFAFA;
-      transition:transform .25s ease,opacity .25s ease;
-    }
-    .ec-nav-toggle.is-open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
-    .ec-nav-toggle.is-open span:nth-child(2){opacity:0;}
-    .ec-nav-toggle.is-open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
-
-    .ec-nav-links{
-      position:fixed;inset:0;z-index:60;
-      flex-direction:column;align-items:center;justify-content:center;gap:28px;
-      background:rgba(10,10,10,0.98);
-      opacity:0;visibility:hidden;pointer-events:none;
-      transition:opacity .25s ease;
-    }
-    .ec-nav-links.is-open{opacity:1;visibility:visible;pointer-events:auto;}
-    .ec-nav-links a{font-size:15px;}
-
-    /* logo + scroll arrows: stack instead of cramming side by side */
-    .ec-logo-row{flex-direction:column;gap:20px;}
-
-    /* trabalho: bigger single-card thumbs on mobile */
-    .ec-trabalho-item{width:92vw;}
-
-    /* trabalho / sobre / contato: align to top, tighten spacing, and allow internal scroll instead of hard-clipping long text */
-    .ec-overlay-inner{
-      justify-content:flex-start;
-      padding-top:72px;padding-bottom:20px;
-      overflow-y:auto;-webkit-overflow-scrolling:touch;
-    }
-    .ec-overlay-title{margin-bottom:14px;}
-    .ec-sobre-body{font-size:14px;line-height:1.5;margin-bottom:14px;}
-
-    .ec-lang{top:22px;left:20px;right:auto;}
-  }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/enlabs.css?v=2">
+<link rel="stylesheet" href="assets/css/home.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0B0A10">
 </head>
 <body>
 
 <div id="home">
 
   <nav class="ec-nav">
+    <a class="ec-nav-logo" href="#home" aria-label="enlabs" data-nav-logo><span class="ec-wm">enlabs<i></i></span></a>
     <div class="ec-nav-links" data-nav-links>
       <a href="#home">Home</a>
       <a href="#trabalho">Nosso trabalho</a>
@@ -235,9 +42,9 @@
   </div>
 
   <div class="ec-stage">
-    <div id="trabalho" class="ec-anchor"></div>
-    <div id="sobre" class="ec-anchor"></div>
-    <div id="contato" class="ec-anchor"></div>
+    <div id="trabalho" class="ec-anchor ec-anchor--work"></div>
+    <div id="sobre" class="ec-anchor ec-anchor--about"></div>
+    <div id="contato" class="ec-anchor ec-anchor--contact"></div>
 
     <div class="ec-sticky">
 
@@ -251,14 +58,16 @@
 
         <div class="ec-logo-layer" data-logo>
           <div class="ec-logo-row">
-            <div class="ec-logo-block">
-              <h1 class="ec-logo" aria-label="enlabs"><span class="ec-logo-letter" style="animation-delay:0.00s;">e</span><span class="ec-logo-letter" style="animation-delay:0.26s;">n</span><span class="ec-logo-letter" style="animation-delay:0.03s;">l</span><span class="ec-logo-letter" style="animation-delay:0.29s;">a</span><span class="ec-logo-letter" style="animation-delay:0.31s;">b</span><span class="ec-logo-letter" style="animation-delay:0.34s;">s</span></h1>
-              <p class="ec-tagline">CGI para Arquitetura e Empreendimentos</p>
-            </div>
+            <h1 class="ec-logo" aria-label="enlabs — architectural visualization lab">
+              <span class="ec-lockup" aria-hidden="true">
+                <span class="ec-wm"><span class="ec-logo-letter" style="animation-delay:0.00s;">e</span><span class="ec-logo-letter" style="animation-delay:0.26s;">n</span><span class="ec-logo-letter" style="animation-delay:0.03s;">l</span><span class="ec-logo-letter" style="animation-delay:0.29s;">a</span><span class="ec-logo-letter" style="animation-delay:0.31s;">b</span><span class="ec-logo-letter" style="animation-delay:0.34s;">s</span><i></i></span>
+                <span class="ec-ds">architectural visualization lab</span>
+              </span>
+            </h1>
             <div class="ec-arrows" aria-hidden="true">
-              <svg class="ec-scroll-arrow" style="animation-delay:0s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <svg class="ec-scroll-arrow" style="animation-delay:0.3s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <svg class="ec-scroll-arrow" style="animation-delay:0.6s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="#FAFAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ec-scroll-arrow" style="animation-delay:0s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ec-scroll-arrow" style="animation-delay:0.3s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="ec-scroll-arrow" style="animation-delay:0.6s;" width="20" height="11" viewBox="0 0 16 9" fill="none"><path d="M1 1L8 8L15 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
         </div>
@@ -266,51 +75,61 @@
       </div>
 
       <!-- trabalho -->
-      <div class="ec-overlay ec-overlay--trabalho" data-trabalho-overlay>
+      <div class="ec-overlay ec-overlay--work" data-trabalho-overlay>
         <div class="ec-overlay-inner" data-trabalho-text>
-          <span class="ec-overlay-title">Nosso trabalho</span>
-          <div class="ec-trabalho-scroll">
-            <a class="ec-trabalho-item" href="projeto-tack-nexus.html">
+          <div class="ec-overlay-head">
+            <span class="ec-idx">/ 01 — Projetos</span>
+            <span class="ec-title">Nosso trabalho</span>
+          </div>
+          <div class="ec-work-scroll">
+            <a class="ec-work-item" href="projeto-tack-nexus.html">
               <img src="uploads/TACK-NEXUS-FACHADA.jpg" alt="Render — Tack Nexus, fachada noturna">
-              <span class="ec-trabalho-label">Tack Nexus</span>
+              <span class="ec-work-label"><span class="ec-idx">/ 01</span>Tack Nexus</span>
             </a>
-            <a class="ec-trabalho-item" href="projeto-tack-lift.html">
+            <a class="ec-work-item" href="projeto-tack-lift.html">
               <img src="uploads/tack-lift/capa.jpg" alt="Render — Tack Lift, torre">
-              <span class="ec-trabalho-label">Tack Lift</span>
+              <span class="ec-work-label"><span class="ec-idx">/ 02</span>Tack Lift</span>
             </a>
-            <a class="ec-trabalho-item" href="projeto-viver-mais.html">
+            <a class="ec-work-item" href="projeto-viver-mais.html">
               <img src="uploads/viver-mais/capa.jpg" alt="Render — Viver Mais, fachada">
-              <span class="ec-trabalho-label">Viver Mais</span>
+              <span class="ec-work-label"><span class="ec-idx">/ 03</span>Viver Mais</span>
             </a>
-            <a class="ec-trabalho-item" href="projeto-granps-grange.html">
+            <a class="ec-work-item" href="projeto-granps-grange.html">
               <img src="uploads/granps-grange/capa.jpg" alt="Render — Granps Grange, interior rústico">
-              <span class="ec-trabalho-label">Granps Grange</span>
+              <span class="ec-work-label"><span class="ec-idx">/ 04</span>Granps Grange</span>
             </a>
           </div>
         </div>
       </div>
 
       <!-- sobre -->
-      <div class="ec-overlay ec-overlay--sobre" data-sobre-overlay>
+      <div class="ec-overlay ec-overlay--about" data-sobre-overlay>
         <img class="ec-overlay-img" src="uploads/IMAGEM%20PERFIL.jpg" alt="Retrato de Evandro Colombo em galeria de arcos de concreto">
         <div class="ec-overlay-scrim"></div>
         <div class="ec-overlay-inner" data-sobre-text>
-          <span class="ec-overlay-title">Sobre</span>
-          <h2 class="ec-sobre-body">A Enlabs CGI para Arquitetura e Empreendimentos é um estúdio de visualização arquitetônica que trabalha na fronteira entre o projeto e a imagem.
+          <div class="ec-overlay-head">
+            <span class="ec-idx">/ 02 — Estúdio</span>
+            <span class="ec-title">Sobre</span>
+          </div>
+          <h2 class="ec-about-body">A enlabs CGI para Arquitetura e Empreendimentos é um estúdio de visualização arquitetônica que trabalha na fronteira entre o projeto e a imagem.
 
-Fundado por Evandro Colombo, arquiteto e artista 3D formado em Arquitetura e Urbanismo pela UNIMAR, o estúdio nasceu de uma trajetória que passou pelo projeto executivo, pelo canteiro de obras e pelo BIM antes de se voltar inteiramente à visualização. Essa bagagem define o jeito de trabalhar da EnLabs: todo projeto começa pela leitura da própria arquitetura, suas plantas, proporções e intenções, não apenas da geometria a ser renderizada.
+Fundado por Evandro Colombo, arquiteto e artista 3D formado em Arquitetura e Urbanismo pela UNIMAR, o estúdio nasceu de uma trajetória que passou pelo projeto executivo, pelo canteiro de obras e pelo BIM antes de se voltar inteiramente à visualização. Essa bagagem define o jeito de trabalhar da enlabs: todo projeto começa pela leitura da própria arquitetura, suas plantas, proporções e intenções, não apenas da geometria a ser renderizada.
 
 O estúdio atua em parceria com arquitetos, incorporadoras e clientes da indústria, traduzindo projetos em imagens e animações construídas sobre forma, luz, atmosfera e conceito. Mais do que entrega técnica, cada visualização é tratada como uma peça com presença, que permite explorar, sentir e comunicar um projeto antes que ele exista.
 
-Na EnLabs, a visualização é entendida como parte do processo de projeto, uma forma de fazer as pessoas perceberem a arquitetura através da intenção por trás dela.</h2>
+Na enlabs, a visualização é entendida como parte do processo de projeto, uma forma de fazer as pessoas perceberem a arquitetura através da intenção por trás dela.</h2>
         </div>
       </div>
 
       <!-- contato -->
-      <div class="ec-overlay ec-overlay--contato" data-contato-overlay>
+      <div class="ec-overlay ec-overlay--contact" data-contato-overlay>
         <div class="ec-overlay-inner" data-contato-text>
-          <span class="ec-overlay-title">Entre em contato</span>
-          <h2 class="ec-contato-body">Todo projeto começa com uma conversa. Se você quer transformar sua arquitetura em imagem, fale com a gente.</h2>
+          <div class="ec-overlay-head">
+            <span class="ec-idx">/ 03 — Contato</span>
+            <span class="ec-title">Entre em contato</span>
+          </div>
+          <h2 class="ec-contact-body">Todo projeto começa com uma conversa. Se você quer transformar sua arquitetura em imagem, fale com a gente.</h2>
+          <a class="ec-btn ec-btn--primary ec-contact-cta" href="https://wa.me/5514998564066" target="_blank" rel="noopener noreferrer">Iniciar projeto</a>
           <div class="ec-socials">
             <a href="https://instagram.com/art.evandrocolombo" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="https://behance.net/evandro-reis" target="_blank" rel="noopener noreferrer">Behance</a>
@@ -332,6 +151,7 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
   var slides          = Array.prototype.slice.call(document.querySelectorAll('.ec-slide'));
   var heroLayer       = document.querySelector('[data-hero]');
   var logoEl          = document.querySelector('[data-logo]');
+  var navLogo         = document.querySelector('[data-nav-logo]');
   var trabalhoOverlay = document.querySelector('[data-trabalho-overlay]');
   var trabalhoText    = document.querySelector('[data-trabalho-text]');
   var sobreOverlay    = document.querySelector('[data-sobre-overlay]');
@@ -365,6 +185,7 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
       var showLogo = progress < 0.5;
       logoEl.style.opacity = showLogo ? '1' : '0';
       logoEl.style.transform = 'none';
+      navLogo.style.opacity = showLogo ? '0' : '1';
 
       heroLayer.style.opacity = tp1 > 0.5 ? '0' : '1';
       trabalhoOverlay.style.opacity = tp0 > 0.5 ? '1' : '0';
@@ -388,6 +209,8 @@ Na EnLabs, a visualização é entendida como parte do processo de projeto, uma 
     var lp = clamp01(progress / 0.5);
     logoEl.style.opacity = String(1 - lp);
     logoEl.style.transform = 'translateY(' + (-40 * lp) + 'px)';
+    // the nav logo takes over as the hero logo leaves: one spark per screen
+    navLogo.style.opacity = String(lp);
 
     // hero stays visible (same slideshow) through the trabalho dwell,
     // and only fades out on the trabalho → sobre transition

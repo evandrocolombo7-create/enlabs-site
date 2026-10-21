@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamento — enlabs CGI para Arquitetura e Empreendimentos</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/enlabs.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0B0A10">
+<style>
+  :root{--content-max:1200px;}
+
+  .ec-topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:22px var(--content-pad);border-bottom:1px solid var(--line);
+  }
+  .ec-topbar .ec-wm{font-size:24px;}
+  .ec-topbar a.ec-label{transition:color var(--duration-standard) var(--ease-standard);}
+  .ec-topbar a.ec-label:hover{color:var(--mist);}
+
+  main{max-width:var(--content-max);margin:0 auto;padding:0 var(--content-pad) var(--space-9);}
+
+  .ec-price-head{padding:var(--space-8) 0 var(--space-6);display:flex;flex-direction:column;gap:16px;}
+  .ec-price-head h1{margin:0;}
+  .ec-price-head p{font-size:16px;line-height:1.6;color:var(--smoke);margin:0;max-width:64ch;}
+
+  /* ---------- segmented client tabs ---------- */
+  .ec-segmented{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--space-7);}
+  .ec-segmented button{
+    background:transparent;border:1px solid var(--line-strong);color:var(--smoke);
+    padding:12px 18px;font:500 11px/1 var(--font-mono);letter-spacing:.1em;
+    text-transform:uppercase;cursor:pointer;
+    transition:all var(--duration-standard) var(--ease-standard);
+  }
+  .ec-segmented button:hover{border-color:var(--mist);color:var(--mist);}
+  .ec-segmented button.is-active{background:var(--mist);border-color:var(--mist);color:var(--void);}
+
+  /* ---------- layout grid ---------- */
+  .ec-price-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start;}
+
+  .ec-card{background:var(--graphite);border:1px solid var(--line);padding:28px;margin-bottom:4px;}
+  .ec-card h2{
+    font:500 12px/1 var(--font-mono);letter-spacing:var(--tracking-label);
+    text-transform:uppercase;margin:0 0 22px;color:var(--ember);
+  }
+  .ec-card-hint{font-size:13px;color:var(--smoke);margin:-10px 0 18px;}
+
+  .ec-stepper{display:inline-flex;align-items:center;gap:0;}
+  .ec-stepper button{
+    width:40px;height:40px;border:1px solid var(--line-strong);background:transparent;
+    color:var(--mist);font:400 18px/1 var(--font-mono);cursor:pointer;
+    transition:background-color var(--duration-fast) var(--ease-standard),border-color var(--duration-fast) var(--ease-standard);
+  }
+  .ec-stepper button:hover{border-color:var(--mist);}
+  .ec-stepper button:active{background:var(--graphite-2);}
+  .ec-stepper span{display:inline-block;min-width:64px;text-align:center;font:500 20px/1 var(--font-mono);}
+  .ec-tier-note{margin:14px 0 0;font:400 12px/1.6 var(--font-mono);color:var(--smoke);}
+
+  .ec-stepper-inline{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding-top:16px;margin-top:16px;border-top:1px solid var(--line);
+  }
+  .ec-stepper-inline > span:first-child{font-size:14px;color:var(--mist);}
+
+  .ec-radio-group{display:flex;flex-direction:column;gap:6px;}
+  .ec-radio{
+    display:flex;align-items:center;gap:12px;padding:13px 14px;
+    border:1px solid var(--line-strong);cursor:pointer;
+    transition:border-color var(--duration-fast) var(--ease-standard),background-color var(--duration-fast) var(--ease-standard);
+  }
+  .ec-radio:hover{border-color:var(--smoke);}
+  .ec-radio input{accent-color:var(--ember);width:15px;height:15px;flex:0 0 auto;}
+  .ec-radio-label{flex:1;font-size:14px;color:var(--mist);}
+  .ec-radio-price{font:400 12px/1 var(--font-mono);color:var(--smoke);white-space:nowrap;}
+  .ec-radio.is-checked{background:var(--graphite-2);border-color:var(--mist);}
+
+  .ec-check{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mist);margin-bottom:14px;cursor:pointer;}
+  .ec-check input{accent-color:var(--ember);width:15px;height:15px;flex:0 0 auto;}
+  .ec-check.is-disabled{opacity:.4;cursor:not-allowed;}
+  .ec-check:last-child{margin-bottom:0;}
+
+  /* ---------- summary ---------- */
+  .ec-price-summary{position:sticky;top:24px;background:var(--graphite);border:1px solid var(--line-strong);padding:28px;}
+  .ec-price-summary h2{
+    font:500 12px/1 var(--font-mono);letter-spacing:var(--tracking-label);
+    text-transform:uppercase;margin:0 0 18px;color:var(--ember);
+  }
+  .ec-summary-lines{list-style:none;margin:0 0 20px;padding:0;}
+  .ec-summary-lines li{
+    display:flex;justify-content:space-between;gap:12px;
+    font-size:13px;padding:10px 0;border-bottom:1px solid var(--line);
+  }
+  .ec-summary-lines li span:first-child{color:var(--smoke);}
+  .ec-summary-lines li span:last-child{white-space:nowrap;color:var(--mist);font-family:var(--font-mono);font-size:12px;}
+  .ec-summary-empty{font-size:13px;color:var(--smoke);padding:10px 0;}
+  .ec-total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:16px;margin-top:4px;}
+  .ec-total span{font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);}
+  .ec-total strong{font:500 26px/1 var(--font-mono);letter-spacing:-.02em;color:var(--mist);text-align:right;}
+  .ec-fineprint{font-size:12px;line-height:1.6;color:var(--smoke);margin:18px 0 24px;}
+  .ec-cta{width:100%;}
+
+  /* ---------- subscription plans ---------- */
+  .ec-subscription,
+  .ec-notes{margin-top:var(--space-9);padding-top:var(--space-7);border-top:1px solid var(--line);}
+  .ec-subscription > h2,
+  .ec-notes > h2{
+    font:800 clamp(26px,3vw,38px)/.95 var(--font-display);letter-spacing:var(--tracking-title);margin:0 0 14px;
+  }
+  .ec-subscription > p{font-size:15px;color:var(--smoke);margin:0 0 32px;max-width:60ch;line-height:1.6;}
+  .ec-plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+  .ec-plan{border:1px solid var(--line-strong);background:var(--graphite);padding:28px;position:relative;}
+  .ec-plan.is-featured{border-color:var(--mist);}
+  .ec-plan-tag{
+    position:absolute;top:-10px;left:28px;background:var(--mist);color:var(--void);
+    font:500 10px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;
+  }
+  .ec-plan h3{font:500 12px/1 var(--font-mono);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--smoke);margin:0 0 16px;}
+  .ec-plan-price{font:500 26px/1 var(--font-mono);letter-spacing:-.02em;margin:0;}
+  .ec-plan-price small{font:400 12px/1 var(--font-mono);letter-spacing:0;color:var(--smoke);}
+  .ec-plan-desc{font-size:14px;color:var(--smoke);line-height:1.6;margin:16px 0 0;}
+
+  /* ---------- notes ---------- */
+  .ec-notes > h2{margin-bottom:28px;}
+  .ec-notes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .ec-notes-col h3{
+    font:500 12px/1 var(--font-mono);letter-spacing:var(--tracking-label);text-transform:uppercase;
+    color:var(--ember);margin:0 0 14px;padding-top:14px;border-top:1px solid var(--line-strong);
+  }
+  .ec-notes-col ol,.ec-notes-col ul{margin:0;padding-left:18px;}
+  .ec-notes-col li{font-size:14px;line-height:1.7;color:var(--mist);}
+  .ec-notes-col li::marker{color:var(--smoke);font-family:var(--font-mono);font-size:12px;}
+
+  @media (max-width:900px){
+    .ec-price-grid{grid-template-columns:1fr;}
+    .ec-price-summary{position:static;}
+    .ec-plan-grid{grid-template-columns:1fr;gap:16px;}
+    .ec-notes-grid{grid-template-columns:1fr;gap:24px;}
+  }
+  @media (max-width:520px){
+    .ec-topbar{padding:18px 20px;}
+    main{padding:0 20px var(--space-8);}
+    .ec-price-head{padding:36px 0 28px;}
+    .ec-card,.ec-price-summary,.ec-plan{padding:22px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="ec-topbar">
+  <a href="index.html" aria-label="enlabs"><span class="ec-wm">enlabs<i></i></span></a>
+  <a class="ec-label" href="index.html">← Voltar ao site</a>
+</div>
+
+<main>
+  <div class="ec-price-head">
+    <span class="ec-idx">/ Orçamento</span>
+    <h1 class="ec-title">Calculadora de orçamento</h1>
+    <p>Ajuste as quantidades abaixo para estimar o valor do seu projeto. Os valores seguem a tabela vigente e são aproximados — o orçamento final é confirmado após o envio do material.</p>
+  </div>
+
+  <div class="ec-segmented" data-client-tabs>
+    <button type="button" data-client="arquitetos" class="is-active">Arquitetos e estúdios</button>
+    <button type="button" data-client="incorporadoras">Incorporadoras e construtoras</button>
+    <button type="button" data-client="mobiliario">Mobiliário</button>
+  </div>
+
+  <div class="ec-price-grid">
+    <div class="ec-price-controls">
+
+      <section class="ec-card">
+        <h2>Imagens</h2>
+        <div class="ec-stepper">
+          <button type="button" data-step="images" data-dir="-1" aria-label="Diminuir imagens">−</button>
+          <span data-images-value>0</span>
+          <button type="button" data-step="images" data-dir="1" aria-label="Aumentar imagens">+</button>
+        </div>
+        <p class="ec-tier-note" data-images-tier>Selecione a quantidade de imagens.</p>
+      </section>
+
+      <section class="ec-card">
+        <h2>Filme renderizado</h2>
+        <div class="ec-radio-group" data-video-options></div>
+      </section>
+
+      <section class="ec-card">
+        <h2>Motion IA</h2>
+        <p class="ec-card-hint">Clipes curtos de 5 a 10s criados a partir das imagens já renderizadas.</p>
+        <div class="ec-stepper">
+          <button type="button" data-step="clips" data-dir="-1" aria-label="Diminuir clipes">−</button>
+          <span data-clips-value>0</span>
+          <button type="button" data-step="clips" data-dir="1" aria-label="Aumentar clipes">+</button>
+        </div>
+      </section>
+
+      <section class="ec-card">
+        <h2>Adicionais</h2>
+        <label class="ec-check" data-add-wrap="vertical">
+          <input type="checkbox" data-add="vertical">
+          Versão vertical 9:16 para redes (+20% sobre o filme)
+        </label>
+        <label class="ec-check" data-add-wrap="4k">
+          <input type="checkbox" data-add="4k">
+          Entrega em 4K (+15% sobre o filme)
+        </label>
+        <label class="ec-check" data-fotoinsercao-wrap hidden>
+          <input type="checkbox" data-add="fotoinsercao">
+          Fotoinserção em imagem de drone (sob orçamento)
+        </label>
+        <div class="ec-stepper-inline">
+          <span>Revisões extras de imagem (R$ 100 cada)</span>
+          <div class="ec-stepper">
+            <button type="button" data-step="revisions" data-dir="-1" aria-label="Diminuir revisões">−</button>
+            <span data-revisions-value>0</span>
+            <button type="button" data-step="revisions" data-dir="1" aria-label="Aumentar revisões">+</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="ec-price-summary">
+      <h2>Resumo</h2>
+      <ul class="ec-summary-lines" data-summary-lines></ul>
+      <div class="ec-total">
+        <span>Total estimado</span>
+        <strong data-total>R$ 0</strong>
+      </div>
+      <p class="ec-fineprint">Valores aproximados calculados a partir da tabela vigente. Modelagem para projetos de grande porte ou peças complexas pode ser orçada à parte. Orçamento final confirmado após envio do projeto.</p>
+      <a class="ec-btn ec-btn--primary ec-cta" data-whatsapp href="#" target="_blank" rel="noopener noreferrer">Solicitar orçamento pelo WhatsApp</a>
+    </aside>
+  </div>
+
+  <section class="ec-subscription">
+    <h2>Assinatura mensal</h2>
+    <p>Para escritórios e estúdios que precisam de imagens todo mês. Contrato mínimo de 3 meses, pagamento antecipado todo dia 5. Disponível em formato white label para estúdios de ArchViz.</p>
+    <div class="ec-plan-grid">
+      <article class="ec-plan">
+        <h3>Start</h3>
+        <p class="ec-plan-price">R$ 1.600 <small>/ mês</small></p>
+        <p class="ec-plan-desc">Até 4 imagens por mês. Excedente a R$ 450 por imagem.</p>
+      </article>
+      <article class="ec-plan">
+        <h3>Essencial</h3>
+        <p class="ec-plan-price">R$ 2.800 <small>/ mês</small></p>
+        <p class="ec-plan-desc">Até 8 imagens + 2 clipes Motion IA de 10s por mês. Excedente a R$ 420 por imagem.</p>
+      </article>
+      <article class="ec-plan is-featured">
+        <span class="ec-plan-tag">Mais escolhido</span>
+        <h3>Studio</h3>
+        <p class="ec-plan-price">R$ 5.000 <small>/ mês</small></p>
+        <p class="ec-plan-desc">Até 15 imagens + 5 clipes Motion IA de 10s por mês. Excedente a R$ 400 por imagem.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="ec-notes">
+    <h2>Como funciona</h2>
+    <div class="ec-notes-grid">
+      <div class="ec-notes-col">
+        <h3>Imagens</h3>
+        <ol>
+          <li>Envio do projeto e referências</li>
+          <li>Primeira versão</li>
+          <li>Até 2 rodadas de revisão por imagem</li>
+          <li>Entrega em alta resolução</li>
+        </ol>
+      </div>
+      <div class="ec-notes-col">
+        <h3>Filmes</h3>
+        <ol>
+          <li>Aprovação do trajeto de câmera (prévia em baixa qualidade)</li>
+          <li>Aprovação de um frame final (luz e materiais)</li>
+          <li>Render e edição final, com 1 rodada de ajustes</li>
+        </ol>
+      </div>
+      <div class="ec-notes-col">
+        <h3>Prazos e pagamento</h3>
+        <ul>
+          <li>Imagem avulsa: 5 a 7 dias úteis</li>
+          <li>Pacotes de imagens: 10 a 15 dias úteis</li>
+          <li>Filmes: 15 a 30 dias úteis</li>
+          <li>Até R$ 5.000: 50% no fechamento e 50% na entrega</li>
+          <li>Acima de R$ 5.000: 40% no fechamento, 30% na aprovação de câmera/primeira versão, 30% na entrega</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var CLIENTS = {
+    arquitetos: {
+      label: 'Arquitetos e estúdios',
+      imageTiers: [
+        { min: 1, max: 2, price: 450 },
+        { min: 3, max: 5, price: 420 },
+        { min: 6, max: 9, price: 395 },
+        { min: 10, max: Infinity, price: 375 }
+      ],
+      videos: [
+        { id: 'none', label: 'Nenhum', price: 0 },
+        { id: 'v15', label: '15s — redes sociais, apresentação rápida', price: 1500 },
+        { id: 'v30', label: '30s — apresentação ao cliente', price: 2700 },
+        { id: 'v60', label: '60s — tour completo do projeto', price: 4800 }
+      ],
+      hasFotoinsercao: false
+    },
+    incorporadoras: {
+      label: 'Incorporadoras e construtoras',
+      imageTiers: [
+        { min: 1, max: 3, price: 1200 },
+        { min: 4, max: 7, price: 1100 },
+        { min: 8, max: Infinity, price: 1000 }
+      ],
+      videos: [
+        { id: 'none', label: 'Nenhum', price: 0 },
+        { id: 'teaser15', label: 'Teaser 15s — lançamento, anúncios', price: 3500 },
+        { id: 'filme30', label: 'Filme 30s — filme de vendas', price: 6000 },
+        { id: 'inst6090', label: 'Institucional 60–90s — filme do empreendimento', price: 10000, approx: true }
+      ],
+      hasFotoinsercao: true
+    },
+    mobiliario: {
+      label: 'Mobiliário',
+      imageTiers: [
+        { min: 1, max: 2, price: 450 },
+        { min: 3, max: 5, price: 420 },
+        { min: 6, max: 9, price: 395 },
+        { min: 10, max: Infinity, price: 375 }
+      ],
+      videos: [
+        { id: 'none', label: 'Nenhum', price: 0 },
+        { id: 'produto', label: 'Produto 10–15s — giro da peça ou peça em ambiente', price: 1200 }
+      ],
+      hasFotoinsercao: false
+    }
+  };
+
+  var WHATSAPP_NUMBER = '5514998564066';
+
+  var state = {
+    client: 'arquitetos',
+    images: 0,
+    videoId: 'none',
+    clips: 0,
+    vertical: false,
+    k4: false,
+    revisions: 0,
+    fotoinsercao: false
+  };
+
+  var els = {
+    tabs: document.querySelectorAll('[data-client-tabs] button'),
+    imagesValue: document.querySelector('[data-images-value]'),
+    imagesTier: document.querySelector('[data-images-tier]'),
+    videoOptions: document.querySelector('[data-video-options]'),
+    clipsValue: document.querySelector('[data-clips-value]'),
+    revisionsValue: document.querySelector('[data-revisions-value]'),
+    verticalWrap: document.querySelector('[data-add-wrap="vertical"]'),
+    k4Wrap: document.querySelector('[data-add-wrap="4k"]'),
+    verticalInput: document.querySelector('input[data-add="vertical"]'),
+    k4Input: document.querySelector('input[data-add="4k"]'),
+    fotoinsercaoWrap: document.querySelector('[data-fotoinsercao-wrap]'),
+    fotoinsercaoInput: document.querySelector('input[data-add="fotoinsercao"]'),
+    summaryLines: document.querySelector('[data-summary-lines]'),
+    total: document.querySelector('[data-total]'),
+    whatsapp: document.querySelector('[data-whatsapp]')
+  };
+
+  function brl(n) {
+    return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+  }
+
+  function clipsPrice(n) {
+    if (n <= 0) return 0;
+    var groups = Math.floor(n / 3);
+    var rem = n % 3;
+    return groups * 600 + rem * 250;
+  }
+
+  function currentClient() {
+    return CLIENTS[state.client];
+  }
+
+  function buildVideoOptions() {
+    var client = currentClient();
+    els.videoOptions.innerHTML = '';
+    client.videos.forEach(function (v) {
+      var label = document.createElement('label');
+      label.className = 'ec-radio';
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'video';
+      input.value = v.id;
+      input.checked = v.id === state.videoId;
+      input.addEventListener('change', function () {
+        state.videoId = v.id;
+        render();
+      });
+      var text = document.createElement('span');
+      text.className = 'ec-radio-label';
+      text.textContent = v.label;
+      var price = document.createElement('span');
+      price.className = 'ec-radio-price';
+      price.textContent = v.price === 0 ? '—' : (v.approx ? 'a partir de ' : '') + brl(v.price);
+      label.appendChild(input);
+      label.appendChild(text);
+      label.appendChild(price);
+      label.classList.toggle('is-checked', input.checked);
+      els.videoOptions.appendChild(label);
+    });
+  }
+
+  function switchClient(id) {
+    state.client = id;
+    state.videoId = 'none';
+    state.fotoinsercao = false;
+    if (els.fotoinsercaoInput) els.fotoinsercaoInput.checked = false;
+    els.tabs.forEach(function (btn) {
+      btn.classList.toggle('is-active', btn.getAttribute('data-client') === id);
+    });
+    buildVideoOptions();
+    if (els.fotoinsercaoWrap) {
+      els.fotoinsercaoWrap.hidden = !currentClient().hasFotoinsercao;
+    }
+    render();
+  }
+
+  function render() {
+    var client = currentClient();
+
+    els.imagesValue.textContent = state.images;
+    var tier = state.images > 0
+      ? client.imageTiers.filter(function (t) { return state.images >= t.min && state.images <= t.max; })[0]
+      : null;
+    var imagesSubtotal = tier ? state.images * tier.price : 0;
+    els.imagesTier.textContent = tier
+      ? brl(tier.price) + ' por imagem nesta faixa'
+      : 'Selecione a quantidade de imagens.';
+
+    var video = client.videos.filter(function (v) { return v.id === state.videoId; })[0] || client.videos[0];
+    var videoSubtotal = video.price;
+
+    els.clipsValue.textContent = state.clips;
+    var clipsSubtotal = clipsPrice(state.clips);
+
+    var videoActive = videoSubtotal > 0;
+    els.verticalWrap.classList.toggle('is-disabled', !videoActive);
+    els.k4Wrap.classList.toggle('is-disabled', !videoActive);
+    els.verticalInput.disabled = !videoActive;
+    els.k4Input.disabled = !videoActive;
+    if (!videoActive) {
+      state.vertical = false;
+      state.k4 = false;
+      els.verticalInput.checked = false;
+      els.k4Input.checked = false;
+    }
+
+    var addVertical = videoActive && state.vertical ? videoSubtotal * 0.20 : 0;
+    var add4k = videoActive && state.k4 ? videoSubtotal * 0.15 : 0;
+
+    els.revisionsValue.textContent = state.revisions;
+    var revisionsSubtotal = state.revisions * 100;
+
+    var total = imagesSubtotal + videoSubtotal + clipsSubtotal + addVertical + add4k + revisionsSubtotal;
+    var hasApprox = !!video.approx;
+
+    // summary lines
+    els.summaryLines.innerHTML = '';
+    var lines = [];
+    if (state.images > 0) {
+      lines.push([state.images + ' imagem(ns) × ' + brl(tier.price), brl(imagesSubtotal)]);
+    }
+    if (videoSubtotal > 0) {
+      lines.push([video.label, (hasApprox ? 'a partir de ' : '') + brl(videoSubtotal)]);
+    }
+    if (state.clips > 0) {
+      lines.push([state.clips + ' clipe(s) Motion IA', brl(clipsSubtotal)]);
+    }
+    if (addVertical > 0) {
+      lines.push(['Versão vertical 9:16 (+20%)', brl(addVertical)]);
+    }
+    if (add4k > 0) {
+      lines.push(['Entrega 4K (+15%)', brl(add4k)]);
+    }
+    if (revisionsSubtotal > 0) {
+      lines.push([state.revisions + ' revisão(ões) extra(s)', brl(revisionsSubtotal)]);
+    }
+    if (state.fotoinsercao) {
+      lines.push(['Fotoinserção em imagem de drone', 'sob orçamento']);
+    }
+
+    if (lines.length === 0) {
+      var empty = document.createElement('li');
+      empty.className = 'ec-summary-empty';
+      empty.textContent = 'Ajuste os controles para ver o orçamento.';
+      els.summaryLines.appendChild(empty);
+    } else {
+      lines.forEach(function (l) {
+        var li = document.createElement('li');
+        var a = document.createElement('span');
+        a.textContent = l[0];
+        var b = document.createElement('span');
+        b.textContent = l[1];
+        li.appendChild(a);
+        li.appendChild(b);
+        els.summaryLines.appendChild(li);
+      });
+    }
+
+    els.total.textContent = (hasApprox ? 'a partir de ' : '') + brl(total);
+
+    // whatsapp message
+    var msgLines = ['Olá! Gostaria de um orçamento com a enlabs.', '', 'Cliente: ' + client.label];
+    lines.forEach(function (l) { msgLines.push('- ' + l[0] + ': ' + l[1]); });
+    msgLines.push('', 'Total estimado: ' + (hasApprox ? 'a partir de ' : '') + brl(total));
+    var msg = encodeURIComponent(msgLines.join('\n'));
+    els.whatsapp.href = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg;
+  }
+
+  els.tabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      switchClient(btn.getAttribute('data-client'));
+    });
+  });
+
+  document.querySelectorAll('[data-step]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.getAttribute('data-step');
+      var dir = parseInt(btn.getAttribute('data-dir'), 10);
+      state[key] = Math.max(0, state[key] + dir);
+      render();
+    });
+  });
+
+  els.verticalInput.addEventListener('change', function () {
+    state.vertical = els.verticalInput.checked;
+    render();
+  });
+  els.k4Input.addEventListener('change', function () {
+    state.k4 = els.k4Input.checked;
+    render();
+  });
+  if (els.fotoinsercaoInput) {
+    els.fotoinsercaoInput.addEventListener('change', function () {
+      state.fotoinsercao = els.fotoinsercaoInput.checked;
+      render();
+    });
+  }
+
+  buildVideoOptions();
+  if (els.fotoinsercaoWrap) {
+    els.fotoinsercaoWrap.hidden = !currentClient().hasFotoinsercao;
+  }
+  render();
+})();
+</script>
+
+</body>
+</html>
