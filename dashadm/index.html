@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>enlabs · Painel</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='24.96' fill='%23FF5A1F'/%3E%3C/svg%3E">
+<link rel="icon" href="painel.ico">
+<!--
+  Painel de administração do enlabs cloud. Abrir com dois cliques (não precisa de servidor).
+  Entra com uma conta que esteja em admin.admins; tudo passa pela Edge Function "admin".
+  A chave abaixo é a PÚBLICA (a mesma do plugin): sozinha não dá acesso a nada.
+-->
+<style>
+@font-face { font-family: 'Syne'; font-weight: 400 800; src: url("fonts/syne-latin.woff2") format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 400 500; src: url("fonts/jetbrains-mono-latin.woff2") format('woff2'); }
+
+:root {
+  --void: #0B0A10;
+  --surface: #14121A;
+  --graphite: #1E1B26;
+  --graphite-2: #2A2733;
+  --line: #2A2733;
+  --line-strong: #3B3746;
+  --smoke: #8C8796;
+  --mist: #F2EFE8;
+  --ember: #FF5A1F;
+  --vapor: #6FE0FF;
+  --error: #FF8A80;
+  --ok: #8BE0A4;
+  --series-ok: #2A9CBE;
+  --series-fail: #E8551E;
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--mist);
+  font: 400 13px/1.45 var(--font-mono);
+}
+.hidden { display: none !important; }
+button, input, select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  padding: 7px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: 11px;
+}
+button:hover { border-color: var(--mist); }
+button.primary { background: var(--ember); border-color: var(--ember); color: var(--void); font-weight: 500; }
+button.primary:hover { filter: brightness(1.1); }
+button.danger { border-color: var(--error); color: var(--error); }
+button:disabled { opacity: .5; cursor: wait; }
+input, select {
+  background: var(--void);
+  border: 1px solid var(--line-strong);
+  padding: 7px 9px;
+  width: 100%;
+  min-width: 0;
+}
+input:focus, select:focus, button:focus-visible { outline: 1px solid var(--ember); outline-offset: 1px; }
+label { display: block; font-size: 10.5px; color: var(--smoke); text-transform: uppercase; letter-spacing: .06em; }
+label > input, label > select { margin-top: 4px; text-transform: none; letter-spacing: 0; color: var(--mist); font-size: 13px; }
+
+/* ---- Logo ---- */
+.wm { font: 800 26px/.85 var(--font-display); letter-spacing: -.04em; display: inline-flex; align-items: flex-end; }
+.wm i {
+  display: inline-block; width: .2em; height: .2em; border-radius: 50%;
+  background: var(--ember); margin: 0 0 .09em .055em; box-shadow: 0 0 .27em var(--ember);
+}
+.ds {
+  font: 500 10.5px/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+  border-left: 1px solid currentColor; margin-left: 12px; padding-left: 12px; opacity: .8; white-space: nowrap;
+}
+
+/* ---- Login ---- */
+#login { max-width: 360px; margin: 14vh auto 0; padding: 0 16px; }
+#login form { display: grid; gap: 14px; margin-top: 28px; }
+
+/* ---- Layout ---- */
+header.top {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 16px 24px; border-bottom: 1px solid var(--line);
+}
+header.top .who { margin-left: auto; color: var(--smoke); font-size: 11px; }
+main { padding: 20px 24px 60px; max-width: 1400px; margin: 0 auto; }
+h2 {
+  font: 700 15px/1 var(--font-display); letter-spacing: -.01em; margin: 32px 0 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+h2 .idx { color: var(--ember); font: 500 11px var(--font-mono); }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.muted { color: var(--smoke); }
+.msg { font-size: 12px; min-height: 1em; }
+.msg.err { color: var(--error); }
+.msg.good { color: var(--ok); }
+
+/* ---- KPIs ---- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.kpi { background: var(--surface); padding: 14px 16px; }
+.kpi .k { font-size: 10.5px; color: var(--smoke); text-transform: uppercase; letter-spacing: .06em; }
+.kpi .v { font: 700 28px/1.1 var(--font-display); margin-top: 6px; }
+.kpi .s { font-size: 11px; color: var(--smoke); margin-top: 2px; }
+.kpi button { margin-top: 8px; padding: 4px 8px; font-size: 10px; }
+
+/* ---- Gráfico ---- */
+.chart-box { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; position: relative; }
+.legend { display: flex; gap: 16px; font-size: 11px; color: var(--smoke); margin-bottom: 8px; }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; border-radius: 2px; }
+.legend .l-ok::before { background: var(--series-ok); }
+.legend .l-fail::before { background: var(--series-fail); }
+#chart { width: 100%; height: 180px; display: block; }
+#chart .bar:hover, #chart .bar:focus { filter: brightness(1.25); outline: none; }
+#chart text { fill: var(--smoke); font: 10px var(--font-mono); }
+#chart .grid { stroke: var(--line); }
+.tip {
+  position: absolute; pointer-events: none; background: var(--graphite); border: 1px solid var(--line-strong);
+  padding: 8px 10px; font-size: 11px; white-space: nowrap; z-index: 5;
+}
+.tip b { font-weight: 500; color: var(--mist); }
+.tip .line { display: inline-block; width: 10px; height: 2px; vertical-align: 3px; margin-right: 6px; }
+details summary { cursor: pointer; color: var(--smoke); font-size: 11px; margin-top: 10px; }
+
+/* ---- Tabelas ---- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 500; font-size: 10.5px; color: var(--smoke); text-transform: uppercase; letter-spacing: .05em; background: var(--graphite); position: sticky; top: 0; cursor: pointer; user-select: none; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover { background: var(--graphite); }
+tbody tr.sel { background: var(--graphite-2); }
+.tag { display: inline-block; padding: 1px 6px; border: 1px solid currentColor; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.tag.active { color: var(--ok); }
+.tag.suspended { color: var(--error); }
+.tag.admin { color: var(--vapor); margin-left: 6px; }
+.neg { color: var(--error); }
+.pos { color: var(--ok); }
+
+/* ---- Gaveta do cliente ---- */
+#drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100vw); background: var(--surface);
+  border-left: 1px solid var(--line-strong); overflow-y: auto; padding: 20px 22px 40px; z-index: 10;
+  box-shadow: -20px 0 40px rgba(0,0,0,.5);
+}
+#drawer h3 { font: 700 18px/1.2 var(--font-display); margin: 0 0 4px; word-break: break-all; }
+.card { border: 1px solid var(--line); padding: 12px; margin-top: 12px; display: grid; gap: 10px; }
+.card .t { font-size: 10.5px; color: var(--ember); text-transform: uppercase; letter-spacing: .08em; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.wallet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 14px; }
+.wallet div { background: var(--void); padding: 10px; }
+.wallet .v { font: 700 22px/1.1 var(--font-display); }
+.close { position: absolute; top: 14px; right: 14px; }
+
+/* ---- Janela "novo cliente" ---- */
+#modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 20; display: grid; place-items: center; padding: 16px; }
+#modal { background: var(--surface); border: 1px solid var(--line-strong); padding: 20px; width: min(440px, 100%); display: grid; gap: 12px; }
+#modal h3 { font: 700 18px var(--font-display); margin: 0; }
+
+@media (max-width: 640px) {
+  header.top, main { padding-left: 16px; padding-right: 16px; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Login ============ -->
+<section id="login" class="hidden">
+  <div><span class="wm">enlabs<i></i></span><span class="ds">cloud / painel</span></div>
+  <form id="login-form">
+    <label>E-mail<input id="login-email" type="email" autocomplete="username" required></label>
+    <label>Senha<input id="login-pass" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Entrar</button>
+    <div id="login-msg" class="msg err"></div>
+  </form>
+</section>
+
+<!-- ============ Painel ============ -->
+<section id="app" class="hidden">
+  <header class="top">
+    <span class="wm">enlabs<i></i></span><span class="ds">cloud / painel</span>
+    <span class="who" id="who"></span>
+    <button id="btn-refresh">Atualizar</button>
+    <button id="btn-logout">Sair</button>
+  </header>
+  <main>
+    <div id="app-msg" class="msg"></div>
+
+    <h2><span class="idx">/ 01</span> Resumo</h2>
+    <div class="kpis" id="kpis"></div>
+
+    <h2><span class="idx">/ 02</span> Renders por dia <span class="muted" style="font: 11px var(--font-mono)">últimos 30 dias</span></h2>
+    <div class="chart-box" id="chart-box">
+      <div class="legend"><span class="l-ok">Concluídos</span><span class="l-fail">Falhas (moeda devolvida)</span></div>
+      <svg id="chart" role="img" aria-label="Renders concluídos e falhas por dia"></svg>
+      <div class="tip hidden" id="tip"></div>
+      <details>
+        <summary>Ver tabela por dia e modelo</summary>
+        <div class="table-wrap" style="margin-top:8px"><table id="report-table"></table></div>
+      </details>
+    </div>
+
+    <h2><span class="idx">/ 03</span> Clientes</h2>
+    <div class="row" style="margin-bottom:10px">
+      <input id="search" placeholder="Buscar por e-mail ou plano…" style="max-width:320px">
+      <select id="filter-status" style="max-width:180px">
+        <option value="">Todas as situações</option>
+        <option value="active">Ativos</option>
+        <option value="suspended">Suspensos</option>
+      </select>
+      <button class="primary" id="btn-new" style="margin-left:auto">+ Novo cliente</button>
+    </div>
+    <div class="table-wrap"><table id="users-table"></table></div>
+
+    <h2><span class="idx">/ 04</span> Últimas falhas</h2>
+    <div class="table-wrap"><table id="errors-table"></table></div>
+  </main>
+</section>
+
+<!-- ============ Gaveta do cliente ============ -->
+<aside id="drawer" class="hidden" aria-label="Cliente">
+  <button class="close" id="drawer-close">Fechar</button>
+  <h3 id="d-email"></h3>
+  <div class="row" id="d-tags"></div>
+  <div class="wallet">
+    <div><div class="k muted">Do plano</div><div class="v" id="d-monthly"></div><div class="muted" id="d-until" style="font-size:11px"></div></div>
+    <div><div class="k muted">Avulsas</div><div class="v" id="d-extra"></div><div class="muted" style="font-size:11px">não expiram</div></div>
+    <div><div class="k muted">Total</div><div class="v" id="d-balance"></div></div>
+  </div>
+  <div id="d-msg" class="msg" style="margin-top:10px"></div>
+
+  <form class="card" id="f-give">
+    <div class="t">Moedas avulsas (não expiram)</div>
+    <div class="grid2">
+      <label>Quantidade (negativo tira)<input name="amount" type="number" step="1" required></label>
+      <label>Anotação<input name="note" placeholder="ex.: pacote avulso 50"></label>
+    </div>
+    <div class="row"><button class="primary" type="submit">Lançar</button>
+      <span class="muted" style="font-size:11px">atalhos:</span>
+      <button type="button" data-quick="10">+10</button><button type="button" data-quick="50">+50</button><button type="button" data-quick="100">+100</button>
+    </div>
+  </form>
+
+  <form class="card" id="f-renew">
+    <div class="t">Renovar plano do mês</div>
+    <div class="muted" style="font-size:11px">A sobra do plano atual zera e entram as moedas novas, válidas até a data.</div>
+    <div class="grid2">
+      <label>Moedas do mês<input name="amount" type="number" min="0" step="1" required></label>
+      <label>Válidas até<input name="until" type="date" required></label>
+    </div>
+    <label>Anotação<input name="note" placeholder="ex.: assinatura novembro"></label>
+    <div><button class="primary" type="submit">Renovar</button></div>
+  </form>
+
+  <div class="card">
+    <div class="t">Conta</div>
+    <form class="row" id="f-plan">
+      <label style="flex:1">Plano<input name="plan" required></label>
+      <button type="submit" style="align-self:flex-end">Salvar plano</button>
+    </form>
+    <form class="row" id="f-pass">
+      <label style="flex:1">Nova senha (mín. 8)<input name="password" type="text" minlength="8" required autocomplete="off"></label>
+      <button type="button" id="btn-gen-pass" style="align-self:flex-end">Gerar</button>
+      <button type="submit" style="align-self:flex-end">Trocar senha</button>
+    </form>
+    <div class="row">
+      <button id="btn-device">Liberar computador</button>
+      <button id="btn-status" class="danger">Suspender</button>
+    </div>
+    <div class="muted" id="d-device" style="font-size:11px"></div>
+  </div>
+
+  <div class="card">
+    <div class="t">Últimos renders</div>
+    <div class="table-wrap"><table id="jobs-table"></table></div>
+  </div>
+  <div class="card">
+    <div class="t">Extrato de moedas</div>
+    <div class="table-wrap"><table id="ledger-table"></table></div>
+  </div>
+</aside>
+
+<!-- ============ Novo cliente ============ -->
+<div id="modal-bg" class="hidden">
+  <form id="modal">
+    <h3>Novo cliente</h3>
+    <label>E-mail<input name="email" type="email" required autocomplete="off"></label>
+    <div class="row" style="align-items:flex-end">
+      <label style="flex:1">Senha (mín. 8)<input name="password" type="text" minlength="8" required autocomplete="off"></label>
+      <button type="button" id="btn-gen-pass2">Gerar</button>
+    </div>
+    <div class="grid2">
+      <label>Plano<input name="plan" value="beta"></label>
+      <label>Moedas do mês<input name="monthly" type="number" min="0" step="1" value="0"></label>
+    </div>
+    <label>Moedas avulsas (não expiram)<input name="extra" type="number" min="0" step="1" value="0"></label>
+    <div class="muted" style="font-size:11px">Envie o e-mail e a senha ao cliente. Ele entra pelo botão ENTRAR do plugin.</div>
+    <div id="modal-msg" class="msg"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button type="button" id="modal-cancel">Cancelar</button>
+      <button class="primary" type="submit">Criar conta</button>
+    </div>
+  </form>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const SUPABASE_URL = 'https://lmoawfwyjkguicjxwtko.supabase.co';
+  const PUBLIC_KEY = 'sb_publishable_6k8GjulhaRhUrglC5nfC5A_sLw5zAYw';
+  const SESSION_KEY = 'enlabs-admin-session';
+
+  const $ = (id) => document.getElementById(id);
+  let session = null;   // { access_token, refresh_token, expires_at }
+  let data = null;      // resposta de "overview"
+  let current = null;   // e-mail do cliente aberto na gaveta
+  let sort = { key: 'email', dir: 1 };
+
+  // ---------- utilidades ----------
+
+  // Cria elemento; textos sempre por textContent (e-mails e anotações vêm de fora).
+  function el(tag, attrs = {}, ...kids) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') e.className = v;
+      else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v);
+    }
+    for (const k of kids.flat()) if (k != null) e.append(k instanceof Node ? k : document.createTextNode(String(k)));
+    return e;
+  }
+  const fmtDate = (s) => s ? new Date(s).toLocaleDateString('pt-BR') : '—';
+  const fmtDateTime = (s) => s ? new Date(s).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
+  const fmtNum = (n) => Number(n ?? 0).toLocaleString('pt-BR');
+  const fmtUsd = (n) => 'US$ ' + Number(n ?? 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function ago(s) {
+    if (!s) return 'nunca';
+    const d = (Date.now() - new Date(s)) / 86400000;
+    if (d < 1 / 24) return 'agora há pouco';
+    if (d < 1) return `há ${Math.round(d * 24)} h`;
+    if (d < 60) return `há ${Math.round(d)} d`;
+    return fmtDate(s);
+  }
+  function genPassword() {
+    const a = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const r = crypto.getRandomValues(new Uint32Array(12));
+    return Array.from(r, (x) => a[x % a.length]).join('');
+  }
+  function say(target, text, kind = '') {
+    const m = $(target);
+    m.textContent = text;
+    m.className = 'msg ' + kind;
+  }
+  function plusMonth() {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // ---------- sessão (Supabase Auth direto, sem biblioteca) ----------
+
+  async function auth(grant, body) {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=${grant}`, {
+      method: 'POST',
+      headers: { apikey: PUBLIC_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error_description || j.msg || 'Não foi possível entrar.');
+    session = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at };
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* aba anônima */ }
+  }
+
+  async function token() {
+    if (session && session.expires_at * 1000 - Date.now() < 60000) {
+      await auth('refresh_token', { refresh_token: session.refresh_token });
+    }
+    return session.access_token;
+  }
+
+  function logout(message) {
+    session = null;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignore */ }
+    $('app').classList.add('hidden');
+    $('drawer').classList.add('hidden');
+    $('login').classList.remove('hidden');
+    say('login-msg', message || '', 'err');
+  }
+
+  // Chama a Edge Function "admin". Erro vira exceção com a mensagem em pt-BR.
+  async function call(action, args = {}) {
+    let r;
+    try {
+      r = await fetch(`${SUPABASE_URL}/functions/v1/admin`, {
+        method: 'POST',
+        headers: { apikey: PUBLIC_KEY, Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, args }),
+      });
+    } catch (_) {
+      throw new Error('Sem conexão com o servidor (internet ou função "admin" não publicada).');
+    }
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) { logout('Sessão expirada. Entre de novo.'); throw new Error('Sessão expirada.'); }
+    if (!r.ok) throw new Error(j.error?.message || `Erro ${r.status}`);
+    return j;
+  }
+
+  // Executa uma ação de botão/formulário: trava o botão, mostra o resultado e recarrega.
+  // okText pode ser texto ou função(resposta). Devolve true se deu certo.
+  async function act(button, target, fn, okText) {
+    if (button) button.disabled = true;
+    say(target, 'Enviando…');
+    try {
+      const res = await fn();
+      await load();
+      if (current) await openUser(current, true);
+      say(target, typeof okText === 'function' ? okText(res) : okText, 'good');
+      return true;
+    } catch (e) {
+      say(target, e.message, 'err');
+      return false;
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  // ---------- carregar e desenhar ----------
+
+  async function load() {
+    $('btn-refresh').disabled = true;
+    try {
+      data = await call('overview');
+      renderKpis();
+      renderChart();
+      renderReportTable();
+      renderUsers();
+      renderErrors();
+      say('app-msg', `Atualizado às ${new Date().toLocaleTimeString('pt-BR')}`, 'muted');
+    } catch (e) {
+      say('app-msg', e.message, 'err');
+    } finally {
+      $('btn-refresh').disabled = false;
+    }
+  }
+
+  function renderKpis() {
+    const u = data.users;
+    const active = u.filter((x) => x.status === 'active').length;
+    const usedMonth = u.reduce((s, x) => s + Number(x.coins_month), 0);
+    const rendersMonth = u.reduce((s, x) => s + Number(x.renders_month), 0);
+    const inWallets = u.reduce((s, x) => s + Number(x.balance), 0);
+    const r = data.report;
+    const ok30 = r.reduce((s, x) => s + Number(x.ok), 0);
+    const fail30 = r.reduce((s, x) => s + Number(x.falhas), 0);
+    const cost30 = r.reduce((s, x) => s + Number(x.custo_usd ?? 0), 0);
+    const failPct = ok30 + fail30 ? Math.round((fail30 / (ok30 + fail30)) * 100) : 0;
+    const usedRecently = u.filter((x) => x.last_render && Date.now() - new Date(x.last_render) < 7 * 86400000).length;
+
+    const tile = (k, v, s, extra) => el('div', { class: 'kpi' }, el('div', { class: 'k' }, k), el('div', { class: 'v' }, v), el('div', { class: 's' }, s), extra);
+    const stale = Number(data.pending);
+    $('kpis').replaceChildren(
+      tile('Clientes', fmtNum(u.length), `${active} ativos · ${u.length - active} suspensos`),
+      tile('Usaram em 7 dias', fmtNum(usedRecently), 'fizeram ao menos 1 render'),
+      tile('Renders no mês', fmtNum(rendersMonth), `${fmtNum(usedMonth)} moedas gastas`),
+      tile('Moedas nas contas', fmtNum(inWallets), 'plano + avulsas, ainda não usadas'),
+      tile('Custo Google · 30 d', fmtUsd(cost30), `${fmtNum(ok30)} imagens entregues`),
+      tile('Falhas · 30 d', `${failPct}%`, `${fmtNum(fail30)} falhas, moedas devolvidas`),
+      tile('Em andamento', fmtNum(stale), 'renders pendentes agora',
+        stale ? el('button', { onclick: (ev) => {
+          if (!confirm('Estornar renders pendentes há mais de 10 minutos?')) return;
+          act(ev.currentTarget, 'app-msg', () => call('refund_stale'), (res) => `${res.refunded} render(s) estornado(s).`);
+        } }, 'Estornar travados') : null),
+    );
+  }
+
+  // Barras empilhadas por dia: concluídos (base) + falhas (topo), 30 dias.
+  function renderChart() {
+    const svg = $('chart');
+    const W = svg.clientWidth || 800, H = 180, padL = 30, padB = 20, padT = 8;
+    const today = new Date();
+    const days = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      days.push(d.toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' })); // AAAA-MM-DD
+    }
+    const byDay = Object.fromEntries(days.map((d) => [d, { ok: 0, fail: 0, cost: 0 }]));
+    for (const r of data.report) {
+      const k = String(r.dia).slice(0, 10);
+      if (!byDay[k]) continue;
+      byDay[k].ok += Number(r.ok);
+      byDay[k].fail += Number(r.falhas);
+      byDay[k].cost += Number(r.custo_usd ?? 0);
+    }
+    const max = Math.max(4, ...days.map((d) => byDay[d].ok + byDay[d].fail));
+    const step = Math.pow(10, Math.floor(Math.log10(max)));
+    const top = Math.ceil(max / step) * step;
+    const y = (v) => H - padB - ((H - padB - padT) * v) / top;
+    const slot = (W - padL) / days.length;
+    const bw = Math.max(3, Math.min(22, slot - 4));
+    const NS = 'http://www.w3.org/2000/svg';
+    const s = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.replaceChildren();
+    for (const v of [0, top / 2, top]) {
+      svg.append(s('line', { class: 'grid', x1: padL, x2: W, y1: y(v), y2: y(v) }));
+      const t = s('text', { x: padL - 6, y: y(v) + 3, 'text-anchor': 'end' });
+      t.textContent = fmtNum(v);
+      svg.append(t);
+    }
+    days.forEach((d, i) => {
+      const v = byDay[d];
+      const x = padL + i * slot + (slot - bw) / 2;
+      const g = s('g', { class: 'bar', tabindex: 0 });
+      // área de toque maior que a barra
+      g.append(s('rect', { x: padL + i * slot, y: padT, width: slot, height: H - padB - padT, fill: 'transparent' }));
+      if (v.ok) g.append(s('rect', { x, y: y(v.ok), width: bw, height: y(0) - y(v.ok), fill: 'var(--series-ok)', rx: 2 }));
+      if (v.fail) {
+        const gap = v.ok ? 2 : 0;
+        g.append(s('rect', { x, y: y(v.ok + v.fail), width: bw, height: Math.max(1, y(v.ok) - y(v.ok + v.fail) - gap), fill: 'var(--series-fail)', rx: 2 }));
+      }
+      const show = () => showTip(i, d, v, x + bw / 2);
+      g.addEventListener('pointermove', show);
+      g.addEventListener('focus', show);
+      g.addEventListener('pointerleave', hideTip);
+      g.addEventListener('blur', hideTip);
+      svg.append(g);
+      if (i % 5 === 4 || i === 29) {
+        const t = s('text', { x: x + bw / 2, y: H - 5, 'text-anchor': 'middle' });
+        t.textContent = d.slice(8, 10) + '/' + d.slice(5, 7);
+        svg.append(t);
+      }
+    });
+  }
+
+  function showTip(i, d, v, cx) {
+    const tip = $('tip');
+    const line = (color) => el('span', { class: 'line', style: `background:${color}` });
+    tip.replaceChildren(
+      el('div', { class: 'muted' }, d.slice(8, 10) + '/' + d.slice(5, 7) + '/' + d.slice(0, 4)),
+      el('div', {}, line('var(--series-ok)'), el('b', {}, fmtNum(v.ok)), ' concluídos'),
+      el('div', {}, line('var(--series-fail)'), el('b', {}, fmtNum(v.fail)), ' falhas'),
+      el('div', { class: 'muted' }, fmtUsd(v.cost)),
+    );
+    tip.classList.remove('hidden');
+    const box = $('chart-box').getBoundingClientRect();
+    const svgBox = $('chart').getBoundingClientRect();
+    const px = svgBox.left - box.left + (cx * svgBox.width) / ($('chart').viewBox.baseVal.width || svgBox.width);
+    const left = Math.min(Math.max(8, px - tip.offsetWidth / 2), box.width - tip.offsetWidth - 8);
+    tip.style.left = left + 'px';
+    tip.style.top = (svgBox.top - box.top + 4) + 'px';
+  }
+  function hideTip() { $('tip').classList.add('hidden'); }
+
+  function table(id, cols, rows, opts = {}) {
+    const head = el('tr', {}, cols.map((c) => el('th', {
+      class: c.num ? 'num' : null,
+      onclick: opts.sortable ? () => { sort = { key: c.key, dir: sort.key === c.key ? -sort.dir : 1 }; renderUsers(); } : null,
+    }, c.label, opts.sortable && sort.key === c.key ? (sort.dir > 0 ? ' ↑' : ' ↓') : '')));
+    const body = rows.length
+      ? rows.map((r) => el('tr', opts.row ? opts.row(r) : {}, cols.map((c) => el('td', { class: c.num ? 'num' : null }, c.fmt ? c.fmt(r) : (r[c.key] ?? '—')))))
+      : [el('tr', {}, el('td', { colspan: cols.length, class: 'muted' }, opts.empty || 'Nada por aqui.'))];
+    $(id).replaceChildren(el('thead', {}, head), el('tbody', {}, body));
+  }
+
+  function renderReportTable() {
+    table('report-table', [
+      { key: 'dia', label: 'Dia', fmt: (r) => String(r.dia).slice(0, 10).split('-').reverse().join('/') },
+      { key: 'modelo', label: 'Modelo' },
+      { key: 'ok', label: 'Ok', num: true },
+      { key: 'falhas', label: 'Falhas', num: true },
+      { key: 'plano_b', label: 'Plano B', num: true },
+      { key: 'motivo_mais_comum', label: 'Motivo mais comum' },
+      { key: 'segundos_medio', label: 'Seg. médio', num: true },
+      { key: 'moedas', label: 'Moedas', num: true },
+      { key: 'custo_usd', label: 'Custo', num: true, fmt: (r) => fmtUsd(r.custo_usd) },
+    ], data.report, { empty: 'Nenhum render nos últimos 30 dias.' });
+  }
+
+  function renderUsers() {
+    const q = $('search').value.trim().toLowerCase();
+    const st = $('filter-status').value;
+    const rows = data.users
+      .filter((u) => (!q || u.email.toLowerCase().includes(q) || String(u.plan).toLowerCase().includes(q)) && (!st || u.status === st))
+      .sort((a, b) => {
+        const x = a[sort.key], y = b[sort.key];
+        if (x == null) return 1;
+        if (y == null) return -1;
+        return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * sort.dir;
+      });
+    table('users-table', [
+      { key: 'email', label: 'E-mail', fmt: (u) => [u.email, u.is_admin ? el('span', { class: 'tag admin' }, 'admin') : null] },
+      { key: 'plan', label: 'Plano' },
+      { key: 'status', label: 'Situação', fmt: (u) => el('span', { class: `tag ${u.status}` }, u.status === 'active' ? 'ativo' : 'suspenso') },
+      { key: 'monthly', label: 'Do plano', num: true, fmt: (u) => fmtNum(u.monthly) },
+      { key: 'monthly_expires_at', label: 'Vence', fmt: (u) => u.monthly > 0 ? fmtDate(u.monthly_expires_at) : '—' },
+      { key: 'extra', label: 'Avulsas', num: true, fmt: (u) => fmtNum(u.extra) },
+      { key: 'balance', label: 'Total', num: true, fmt: (u) => el('b', {}, fmtNum(u.balance)) },
+      { key: 'renders_month', label: 'Renders mês', num: true },
+      { key: 'renders_total', label: 'Total renders', num: true },
+      { key: 'last_render', label: 'Último render', fmt: (u) => ago(u.last_render) },
+      { key: 'has_device', label: 'Computador', fmt: (u) => u.has_device ? 'ligado' : 'livre' },
+    ], rows, {
+      sortable: true,
+      empty: 'Nenhum cliente encontrado.',
+      row: (u) => ({ class: 'click' + (u.email === current ? ' sel' : ''), onclick: () => openUser(u.email) }),
+    });
+  }
+
+  function renderErrors() {
+    table('errors-table', [
+      { key: 'hora', label: 'Hora' },
+      { key: 'email', label: 'Cliente' },
+      { key: 'image_size', label: 'Res.' },
+      { key: 'model_used', label: 'Modelo', fmt: (r) => r.model_used || r.model },
+      { key: 'attempts', label: 'Tent.', num: true },
+      { key: 'error_code', label: 'Motivo' },
+      { key: 'segundos', label: 'Seg.', num: true },
+    ], data.errors, { empty: 'Nenhuma falha registrada.' });
+  }
+
+  // ---------- gaveta do cliente ----------
+
+  async function openUser(email, keepMsg) {
+    current = email;
+    const u = data.users.find((x) => x.email === email);
+    if (!u) { $('drawer').classList.add('hidden'); current = null; return; }
+    renderUsers();
+    $('drawer').classList.remove('hidden');
+    if (!keepMsg) say('d-msg', '');
+    $('d-email').textContent = u.email;
+    $('d-tags').replaceChildren(
+      el('span', { class: `tag ${u.status}` }, u.status === 'active' ? 'ativo' : 'suspenso'),
+      el('span', { class: 'muted', style: 'font-size:11px' }, `plano ${u.plan} · cliente desde ${fmtDate(u.created_at)} · último login ${ago(u.last_sign_in_at)}`),
+    );
+    $('d-monthly').textContent = fmtNum(u.monthly);
+    $('d-until').textContent = u.monthly > 0 ? `vence ${fmtDate(u.monthly_expires_at)}` : 'sem plano ativo';
+    $('d-extra').textContent = fmtNum(u.extra);
+    $('d-balance').textContent = fmtNum(u.balance);
+    $('f-plan').plan.value = u.plan;
+    if (!$('f-renew').until.value) $('f-renew').until.value = plusMonth();
+    $('btn-status').textContent = u.status === 'active' ? 'Suspender' : 'Reativar';
+    $('btn-status').className = u.status === 'active' ? 'danger' : 'primary';
+    $('btn-device').disabled = !u.has_device;
+    $('d-device').textContent = u.has_device
+      ? `Ligada a um computador desde ${fmtDate(u.device_bound_at)}. Liberar deixa o cliente entrar em outro PC.`
+      : 'Nenhum computador ligado: o próximo render liga a conta ao PC do cliente.';
+
+    $('jobs-table').replaceChildren(el('tbody', {}, el('tr', {}, el('td', { class: 'muted' }, 'Carregando…'))));
+    $('ledger-table').replaceChildren();
+    try {
+      const d = await call('user_detail', { email });
+      if (current !== email) return;
+      table('jobs-table', [
+        { key: 'created_at', label: 'Quando', fmt: (j) => fmtDateTime(j.created_at) },
+        { key: 'image_size', label: 'Res.' },
+        { key: 'status', label: 'Situação', fmt: (j) => ({ succeeded: 'ok', failed: 'falhou', pending: 'pendente' })[j.status] || j.status },
+        { key: 'duration_ms', label: 'Seg.', num: true, fmt: (j) => j.duration_ms ? (j.duration_ms / 1000).toFixed(1) : '—' },
+        { key: 'error_code', label: 'Motivo / modelo', fmt: (j) => j.error_code || j.model },
+      ], d.jobs, { empty: 'Nenhum render ainda.' });
+      const REASONS = { grant: 'avulsas', adjust: 'ajuste', render: 'render', refund: 'estorno', monthly: 'plano', expire: 'venceu' };
+      table('ledger-table', [
+        { key: 'created_at', label: 'Quando', fmt: (l) => fmtDateTime(l.created_at) },
+        { key: 'delta', label: 'Moedas', num: true, fmt: (l) => el('span', { class: l.delta > 0 ? 'pos' : 'neg' }, (l.delta > 0 ? '+' : '') + l.delta) },
+        { key: 'reason', label: 'Tipo', fmt: (l) => REASONS[l.reason] || l.reason },
+        { key: 'note', label: 'Anotação' },
+        { key: 'balance_after', label: 'Saldo', num: true },
+      ], d.ledger, { empty: 'Sem movimentos.' });
+    } catch (e) {
+      say('d-msg', e.message, 'err');
+    }
+  }
+
+  // ---------- eventos ----------
+
+  $('login-form').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const btn = ev.submitter;
+    btn.disabled = true;
+    say('login-msg', '');
+    try {
+      await auth('password', { email: $('login-email').value.trim(), password: $('login-pass').value });
+      await start();
+    } catch (e) {
+      say('login-msg', /invalid/i.test(e.message) ? 'E-mail ou senha errados.' : e.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  async function start() {
+    try {
+      const me = await call('whoami');
+      $('who').textContent = me.email;
+    } catch (e) {
+      logout(e.message);
+      return;
+    }
+    $('login').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    $('login-pass').value = '';
+    await load();
+  }
+
+  $('btn-refresh').addEventListener('click', load);
+  $('btn-logout').addEventListener('click', () => logout(''));
+  $('search').addEventListener('input', renderUsers);
+  $('filter-status').addEventListener('change', renderUsers);
+  $('drawer-close').addEventListener('click', () => { $('drawer').classList.add('hidden'); current = null; renderUsers(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!$('modal-bg').classList.contains('hidden')) $('modal-bg').classList.add('hidden');
+    else $('drawer-close').click();
+  });
+  let resizeTimer;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => data && renderChart(), 150); });
+
+  $('f-give').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const f = ev.currentTarget;
+    const amount = parseInt(f.amount.value, 10);
+    if (amount < 0 && !confirm(`Tirar ${-amount} moedas avulsas de ${current}?`)) return;
+    act(ev.submitter, 'd-msg', () => call('give_credits', { email: current, amount, note: f.note.value }),
+      `${amount > 0 ? '+' : ''}${amount} moedas avulsas lançadas.`).then((ok) => ok && f.reset());
+  });
+  document.querySelectorAll('[data-quick]').forEach((b) => b.addEventListener('click', () => {
+    $('f-give').amount.value = b.dataset.quick;
+    $('f-give').amount.focus();
+  }));
+
+  $('f-renew').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const f = ev.currentTarget;
+    const u = data.users.find((x) => x.email === current);
+    const amount = parseInt(f.amount.value, 10);
+    if (u.monthly > 0 && !confirm(`As ${u.monthly} moedas do plano atual vão zerar e entram ${amount}. Continuar?`)) return;
+    const until = `${f.until.value}T23:59:59-03:00`; // fim do dia, horário de Brasília
+    act(ev.submitter, 'd-msg', () => call('renew_monthly', { email: current, amount, until, note: f.note.value }),
+      `Plano renovado: ${amount} moedas até ${f.until.value.split('-').reverse().join('/')}.`);
+  });
+
+  $('f-plan').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    act(ev.submitter, 'd-msg', () => call('set_plan', { email: current, plan: ev.currentTarget.plan.value }), 'Plano salvo.');
+  });
+
+  $('btn-gen-pass').addEventListener('click', () => { $('f-pass').password.value = genPassword(); });
+  $('f-pass').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const f = ev.currentTarget;
+    const password = f.password.value;
+    if (!confirm(`Trocar a senha de ${current}? O cliente terá que entrar de novo no plugin com a nova senha.`)) return;
+    act(ev.submitter, 'd-msg', () => call('set_password', { email: current, password }),
+      `Senha trocada. Nova senha: ${password}`).then((ok) => ok && f.reset());
+  });
+
+  $('btn-device').addEventListener('click', (ev) => {
+    if (!confirm(`Liberar o computador de ${current}? O próximo PC em que ele renderizar fica ligado à conta.`)) return;
+    act(ev.currentTarget, 'd-msg', () => call('reset_device', { email: current }), 'Computador liberado.');
+  });
+
+  $('btn-status').addEventListener('click', (ev) => {
+    const u = data.users.find((x) => x.email === current);
+    const status = u.status === 'active' ? 'suspended' : 'active';
+    if (status === 'suspended' && !confirm(`Suspender ${current}? Ele não consegue mais renderizar (o saldo fica guardado).`)) return;
+    act(ev.currentTarget, 'd-msg', () => call('set_status', { email: current, status }),
+      status === 'active' ? 'Conta reativada.' : 'Conta suspensa.');
+  });
+
+  // novo cliente
+  $('btn-new').addEventListener('click', () => {
+    $('modal').reset();
+    $('modal').password.value = genPassword();
+    say('modal-msg', '');
+    $('modal-bg').classList.remove('hidden');
+    $('modal').email.focus();
+  });
+  $('btn-gen-pass2').addEventListener('click', () => { $('modal').password.value = genPassword(); });
+  $('modal-cancel').addEventListener('click', () => $('modal-bg').classList.add('hidden'));
+  $('modal').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const f = ev.currentTarget;
+    const btn = ev.submitter;
+    const args = {
+      email: f.email.value.trim(),
+      password: f.password.value,
+      plan: f.plan.value,
+      monthly: parseInt(f.monthly.value || '0', 10),
+      extra: parseInt(f.extra.value || '0', 10),
+    };
+    btn.disabled = true;
+    say('modal-msg', 'Criando…');
+    try {
+      await call('create_user', args);
+      $('modal-bg').classList.add('hidden');
+      await load();
+      await openUser(args.email.toLowerCase(), true);
+      say('d-msg', `Conta criada. Envie ao cliente: e-mail ${args.email} · senha ${args.password}`, 'good');
+    } catch (e) {
+      say('modal-msg', e.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ---------- início ----------
+  try { session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (_) { session = null; }
+  if (session) start().catch(() => logout('')); else logout('');
+})();
+</script>
+</body>
+</html>
