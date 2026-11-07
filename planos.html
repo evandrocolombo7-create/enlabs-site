@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planos e moedas — IA Render Lab · enlabs</title>
+<meta name="description" content="Planos mensais e moedas avulsas do IA Render Lab, o plugin de render com IA para SketchUp. Cada imagem custa moedas conforme a resolução.">
+<meta property="og:title" content="Planos e moedas — IA Render Lab">
+<meta property="og:description" content="Plano mensal no cartão ou moedas avulsas com Pix e cartão. 1K = 1 moeda, 2K = 2, 4K = 4.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://enlabs.com.br/planos">
+<meta property="og:image" content="https://enlabs.com.br/toolz/img/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="/assets/css/enlabs.css?v=2">
+<link rel="stylesheet" href="/toolz/toolz.css?v=4">
+<script src="/toolz/vendas.js?v=1"></script>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B0A10">
+</head>
+<body>
+
+<nav class="ec-nav">
+  <a class="ec-nav-logo" href="/" aria-label="enlabs"><span class="ec-wm">enlabs<i></i></span></a>
+  <span class="tz-nav-product">toolz / IA Render Lab</span>
+  <div class="ec-nav-links" data-nav-links>
+    <a href="/toolz/">O plugin</a>
+    <a href="/toolz/#resultados">Resultados</a>
+    <a href="/toolz/#360">360°</a>
+    <a href="/planos" class="is-active">Planos</a>
+    <a href="/toolz/#duvidas">Dúvidas</a>
+    <a class="tz-nav-mobile-only so-abertas" href="/conta">Entrar</a>
+  </div>
+  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="tz-nav-cta so-abertas">
+  <a class="ec-btn" href="/conta">Entrar</a>
+</div>
+
+<main>
+
+  <section class="tz-section tz-wrap tz-page-top">
+    <div class="tz-section-head">
+      <span class="ec-idx">/ Planos — IA Render Lab</span>
+      <h1 class="ec-title">Você paga por imagem gerada.</h1>
+      <p class="tz-lede">Plano mensal no cartão, com moedas que renovam todo mês, ou moedas avulsas com Pix ou cartão, que não expiram. As duas se somam na mesma conta.</p>
+    </div>
+
+    <div class="tz-notice so-fechadas">
+      <p><b>As vendas abrem em breve.</b> Deixe seu contato e avisamos no lançamento.</p>
+      <a class="ec-btn ec-btn--primary" data-aviso target="_blank" rel="noopener noreferrer" href="#">Quero ser avisado</a>
+    </div>
+
+    <div class="tz-sub-head"><span class="ec-label">/ planos mensais</span></div>
+    <div class="tz-plans" data-plans-monthly>
+      <p class="tz-plans-loading tz-log">carregando preços…</p>
+    </div>
+
+    <div class="tz-sub-head"><span class="ec-label">/ moedas avulsas</span></div>
+    <div class="tz-plans tz-plans--single" data-plan-coin></div>
+  </section>
+
+  <!-- custo -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head">
+      <span class="ec-idx">/ 01 — Quanto custa uma imagem</span>
+      <h2 class="ec-title">Moedas por resolução.</h2>
+      <p class="tz-lede">Cada render gasta moedas conforme a resolução. A Textura IA custa o mesmo que um render.</p>
+    </div>
+    <div class="tz-coins">
+      <div class="tz-coin"><span class="ec-label">1K</span><strong>1 moeda</strong><span>Estudos, aprovação rápida, WhatsApp.</span></div>
+      <div class="tz-coin"><span class="ec-label">2K</span><strong>2 moedas</strong><span>Apresentação ao cliente.</span></div>
+      <div class="tz-coin"><span class="ec-label">4K</span><strong>4 moedas</strong><span>Prancha e impressão.</span></div>
+    </div>
+  </section>
+
+  <!-- plano x avulsa -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head">
+      <span class="ec-idx">/ 02 — Plano ou avulsa</span>
+      <h2 class="ec-title">Qual faz mais sentido.</h2>
+    </div>
+    <div class="tz-table-scroll">
+      <table class="tz-table">
+        <thead><tr><th></th><th>Plano mensal</th><th>Moedas avulsas</th></tr></thead>
+        <tbody>
+          <tr><th>Como paga</th><td>Cartão, cobrança automática todo mês</td><td>Pix ou cartão, uma vez</td></tr>
+          <tr><th>Quando as moedas entram</th><td>A cada cobrança aprovada</td><td>Logo depois do pagamento</td></tr>
+          <tr><th>Validade</th><td>Até a próxima renovação; a sobra do mês zera</td><td>Não expiram</td></tr>
+          <tr><th>Preço por moeda</th><td>Menor nos planos maiores</td><td>Fixo, <span data-coin-price>por moeda</span></td></tr>
+          <tr><th>Ideal para</th><td>Quem gera imagens todo mês</td><td>Projetos pontuais ou completar o saldo do mês</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tz-hint-line">As moedas do plano são usadas primeiro; as avulsas ficam para quando as do mês acabarem.</p>
+  </section>
+
+  <!-- como comprar -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head">
+      <span class="ec-idx">/ 03 — Como funciona</span>
+      <h2 class="ec-title">Uma conta para o site e o plugin.</h2>
+    </div>
+    <div class="tz-steps">
+      <div class="tz-step"><span class="ec-idx">01</span><h3>Crie a sua conta.</h3><p>O mesmo e-mail e a mesma senha valem aqui e no plugin.</p></div>
+      <div class="tz-step"><span class="ec-idx">02</span><h3>Pague no Mercado Pago.</h3><p>Plano no cartão ou moedas avulsas com Pix ou cartão. O pagamento é processado pelo Mercado Pago.</p></div>
+      <div class="tz-step"><span class="ec-idx">03</span><h3>Gere no SketchUp.</h3><p>As moedas aparecem na conta em instantes (o Pix pode levar um pouco mais). Entre no plugin e gere.</p></div>
+    </div>
+  </section>
+
+  <!-- dúvidas -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head">
+      <span class="ec-idx">/ 04 — Dúvidas</span>
+      <h2 class="ec-title">Sobre o pagamento.</h2>
+    </div>
+    <div class="tz-faq">
+      <details>
+        <summary>Posso cancelar o plano?</summary>
+        <p>Sim, a qualquer momento, sem multa. O plano não renova mais e as moedas do mês continuam valendo até o fim do ciclo.</p>
+      </details>
+      <details>
+        <summary>Como troco de plano?</summary>
+        <p>Cancele o plano atual e assine o novo. Só pode haver um plano ativo por vez.</p>
+      </details>
+      <details>
+        <summary>Por que pedem o e-mail da minha conta Mercado Pago?</summary>
+        <p>Na assinatura, o Mercado Pago exige que o e-mail informado seja o da conta de quem vai pagar. Se for diferente do e-mail da sua conta enlabs, troque no campo antes de seguir.</p>
+      </details>
+      <details>
+        <summary>Em quanto tempo as moedas entram?</summary>
+        <p>Em segundos depois da aprovação, na maioria dos casos. O Pix às vezes demora um pouco mais.</p>
+      </details>
+      <details>
+        <summary>Funciona em mais de um computador?</summary>
+        <p>Cada conta funciona em um computador. A transferência para outra máquina pode ser feita uma vez a cada 30 dias.</p>
+      </details>
+      <details>
+        <summary>O que acontece com o meu projeto?</summary>
+        <p>Para gerar o render, a vista do modelo é enviada a um serviço de IA do Google. O arquivo do SketchUp não é enviado. Detalhes nos <a class="tz-inline" href="/termos">termos e privacidade</a>.</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ec-footer">
+  <span class="ec-hlockup"><span class="ec-wm">enlabs<i></i></span><span class="ec-hlockup-ds">architectural visualization lab</span></span>
+  <span class="tz-log">pagamento processado pelo Mercado Pago · <a href="/termos">termos e privacidade</a> · <a href="https://wa.me/5514998564066" target="_blank" rel="noopener noreferrer">whatsapp</a></span>
+</footer>
+
+<script src="/toolz/planos-ui.js?v=1"></script>
+<script src="/toolz/nav.js?v=1"></script>
+</body>
+</html>

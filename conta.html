@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minha conta — IA Render Lab · enlabs</title>
+<meta name="robots" content="noindex">
+<script src="/toolz/vendas.js?v=1"></script>
+<script>if (!VENDAS_ABERTAS) location.replace('/planos');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="/assets/css/enlabs.css?v=2">
+<link rel="stylesheet" href="/toolz/toolz.css?v=4">
+<link rel="stylesheet" href="/toolz/conta.css?v=2">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0A10">
+</head>
+<body>
+
+<header class="ct-top">
+  <a class="ct-top-logo" href="/toolz/" aria-label="IA Render Lab"><span class="ec-wm">enlabs<i></i></span></a>
+  <span class="ct-top-product">toolz / minha conta</span>
+  <div class="ct-top-user" data-when="in" hidden>
+    <span class="ct-top-email" data-bind="email"></span>
+    <button class="ct-link" type="button" data-action="logout">Sair</button>
+  </div>
+  <a class="ct-link" href="/planos" data-when="out">Ver planos</a>
+</header>
+
+<main>
+
+  <!-- ================= acesso ================= -->
+  <section class="ct-auth" data-view="auth" hidden>
+    <div class="ct-auth-side">
+      <span class="ec-idx">/ IA Render Lab</span>
+      <h1 class="ct-auth-title" data-auth-title>Entre na sua conta.</h1>
+      <p class="tz-lede" data-auth-lede></p>
+      <div class="ct-chosen" data-chosen hidden>
+        <span class="ec-label" data-chosen-label>Plano escolhido</span>
+        <div class="ct-chosen-row"><strong data-chosen-name></strong><span data-chosen-price></span></div>
+        <span class="ct-chosen-coins" data-chosen-coins></span>
+        <a class="ct-link" href="/planos">Trocar</a>
+      </div>
+    </div>
+
+    <div class="ct-card">
+      <div class="ct-tabs" role="tablist" data-auth-tabs>
+        <a role="tab" href="#entrar" data-tab="entrar">Entrar</a>
+        <a role="tab" href="#cadastro" data-tab="cadastro">Criar conta</a>
+      </div>
+
+      <form class="ct-form" data-form="entrar" novalidate hidden>
+        <label class="ct-field"><span class="ec-label">E-mail</span>
+          <input type="email" name="email" autocomplete="email" required></label>
+        <label class="ct-field"><span class="ec-label">Senha</span>
+          <input type="password" name="password" autocomplete="current-password" required></label>
+        <p class="ct-msg" data-msg role="alert"></p>
+        <button class="ec-btn ec-btn--primary" type="submit">Entrar agora</button>
+        <a class="ct-link" href="#esqueci">Esqueci a senha</a>
+      </form>
+
+      <form class="ct-form" data-form="cadastro" novalidate hidden>
+        <label class="ct-field"><span class="ec-label">E-mail</span>
+          <input type="email" name="email" autocomplete="email" required></label>
+        <label class="ct-field"><span class="ec-label">Senha · mínimo 8 caracteres</span>
+          <input type="password" name="password" autocomplete="new-password" required minlength="8"></label>
+        <label class="ct-check">
+          <input type="checkbox" name="terms" required>
+          <span>Li e aceito os <a href="/termos" class="ct-link-inline" target="_blank">termos de uso e o aviso de privacidade</a>.</span>
+        </label>
+        <p class="ct-msg" data-msg role="alert"></p>
+        <button class="ec-btn ec-btn--primary" type="submit">Criar conta</button>
+        <span class="ct-hint">Enviamos um e-mail de confirmação. A mesma conta vale no site e no plugin.</span>
+      </form>
+
+      <form class="ct-form" data-form="esqueci" novalidate hidden>
+        <p class="ct-form-lede">Informe o e-mail da conta. Enviamos um link para criar uma senha nova.</p>
+        <label class="ct-field"><span class="ec-label">E-mail</span>
+          <input type="email" name="email" autocomplete="email" required></label>
+        <p class="ct-msg" data-msg role="alert"></p>
+        <button class="ec-btn ec-btn--primary" type="submit">Enviar link</button>
+        <a class="ct-link" href="#entrar">Voltar para entrar</a>
+      </form>
+
+      <div class="ct-form ct-done" data-form="enviado" hidden>
+        <span class="ct-done-dot" aria-hidden="true"></span>
+        <h2 data-done-title>Confira o seu e-mail.</h2>
+        <p data-done-text></p>
+        <a class="ec-btn" href="#entrar">Ir para entrar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= minha conta ================= -->
+  <section class="ct-account" data-view="conta" hidden>
+    <p class="ct-loading" data-loading>carregando<span>…</span></p>
+
+    <div data-account hidden>
+      <div class="ct-head">
+        <span class="ec-idx">/ Minha conta</span>
+        <h1 class="ct-title">Suas moedas.</h1>
+      </div>
+
+      <div class="ct-alert" data-alert hidden></div>
+
+      <div class="ct-stats">
+        <div class="ct-stat ct-stat--main">
+          <span class="ec-label">Saldo total</span>
+          <strong data-bind="balance"></strong>
+          <span data-bind="balanceHint"></span>
+        </div>
+        <div class="ct-stat">
+          <span class="ec-label">Moedas do plano</span>
+          <strong data-bind="monthly"></strong>
+          <span data-bind="monthlyHint"></span>
+        </div>
+        <div class="ct-stat">
+          <span class="ec-label">Moedas avulsas</span>
+          <strong data-bind="extra"></strong>
+          <span>Não expiram.</span>
+        </div>
+      </div>
+
+      <div class="ct-grid2">
+        <!-- plano -->
+        <div class="ct-box" id="plano">
+          <div class="ct-box-head"><span class="ec-label">Plano mensal</span></div>
+          <div data-sub></div>
+        </div>
+        <!-- comprar moedas -->
+        <form class="ct-box ct-form ct-form--inline" id="comprar" data-form="comprar" novalidate>
+          <div class="ct-box-head"><span class="ec-label">Comprar moedas avulsas</span></div>
+          <p class="ct-sub-line">Pix ou cartão. Não expiram e somam com as do plano.</p>
+          <label class="ct-field"><span class="ec-label">Quantidade · 1 a 500</span>
+            <input type="number" name="quantity" min="1" max="500" step="1" value="10" inputmode="numeric" required></label>
+          <p class="ct-sub-line" data-buy-total></p>
+          <p class="ct-msg" data-msg role="alert"></p>
+          <button class="ec-btn ec-btn--primary" type="submit">Comprar moedas</button>
+        </form>
+      </div>
+
+      <div class="ct-box" data-plans-box hidden>
+        <div class="ct-box-head"><span class="ec-label">Assinar um plano</span></div>
+        <div class="ct-plans" data-plans></div>
+      </div>
+
+      <div class="ct-box">
+        <div class="ct-box-head"><span class="ec-label">Pagamentos</span></div>
+        <div data-payments></div>
+      </div>
+
+      <div class="ct-grid2">
+        <div class="ct-box">
+          <div class="ct-box-head"><span class="ec-label">Conta</span></div>
+          <dl class="ct-dl">
+            <dt>E-mail</dt><dd data-bind="email"></dd>
+            <dt>Situação</dt><dd data-bind="status"></dd>
+            <dt>Computador</dt><dd data-bind="device"></dd>
+          </dl>
+          <p class="ct-hint">Cada conta funciona em um computador. A transferência para outra máquina pode ser feita uma vez a cada 30 dias.</p>
+        </div>
+        <div class="ct-box ct-box--plugin">
+          <div>
+            <span class="ec-label">Plugin</span>
+            <p>IA Render Lab para SketchUp 2025+, Windows. Entre no plugin com este mesmo e-mail e senha.</p>
+          </div>
+          <div class="ct-actions"><a class="ec-btn" href="#" data-download>Baixar o plugin</a></div>
+        </div>
+      </div>
+
+      <form class="ct-box ct-form ct-form--inline" data-form="senha" novalidate>
+        <input type="text" name="username" autocomplete="username" hidden>
+        <div class="ct-box-head"><span class="ec-label">Trocar senha</span></div>
+        <label class="ct-field"><span class="ec-label">Nova senha · mínimo 8 caracteres</span>
+          <input type="password" name="password" autocomplete="new-password" required minlength="8"></label>
+        <label class="ct-field"><span class="ec-label">Repita a senha</span>
+          <input type="password" name="password2" autocomplete="new-password" required minlength="8"></label>
+        <p class="ct-msg" data-msg role="alert"></p>
+        <button class="ec-btn" type="submit">Salvar senha</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- assinatura: e-mail do Mercado Pago -->
+<dialog class="ct-dialog" data-subscribe-dialog>
+  <form method="dialog" data-form="assinar" novalidate>
+    <span class="ec-label">Assinar plano</span>
+    <h2 data-sub-title></h2>
+    <p data-sub-text></p>
+    <label class="ct-field"><span class="ec-label">E-mail da sua conta Mercado Pago</span>
+      <input type="email" name="payer_email" autocomplete="email" required></label>
+    <p class="ct-hint">O Mercado Pago exige o e-mail da conta de quem vai pagar. Se for diferente do e-mail da sua conta enlabs, troque aqui.</p>
+    <p class="ct-msg" data-msg role="alert"></p>
+    <div class="ct-actions">
+      <button class="ec-btn" value="cancel" formnovalidate>Voltar</button>
+      <button class="ec-btn ec-btn--primary" value="ok" data-sub-ok>Ir para o Mercado Pago</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- confirmação -->
+<dialog class="ct-dialog" data-dialog>
+  <form method="dialog">
+    <span class="ec-label" data-dialog-label></span>
+    <h2 data-dialog-title></h2>
+    <p data-dialog-text></p>
+    <div class="ct-actions">
+      <button class="ec-btn" value="cancel">Voltar</button>
+      <button class="ec-btn ec-btn--primary" value="ok" data-dialog-ok></button>
+    </div>
+  </form>
+</dialog>
+
+<footer class="ec-footer">
+  <span class="ec-hlockup"><span class="ec-wm">enlabs<i></i></span><span class="ec-hlockup-ds">architectural visualization lab</span></span>
+  <span class="tz-log">pagamento processado pelo Mercado Pago · <a href="/termos">termos e privacidade</a> · <a href="https://wa.me/5514998564066" target="_blank" rel="noopener noreferrer">suporte</a></span>
+</footer>
+
+<script src="/toolz/conta.js?v=1"></script>
+</body>
+</html>

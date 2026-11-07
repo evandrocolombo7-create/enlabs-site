@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA Render Lab — render com IA dentro do SketchUp · enlabs</title>
+<meta name="description" content="Plugin para SketchUp que transforma a vista do modelo em imagem realista com IA, sem mudar a forma nem os materiais, com o render alinhado ao wirecolor para pós-produzir no Photoshop.">
+<meta property="og:title" content="IA Render Lab — a IA dá a luz, a forma continua sua">
+<meta property="og:description" content="Render com IA dentro do SketchUp, alinhado ao wirecolor. Beta aberto com 10 moedas grátis.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://enlabs.com.br/toolz/">
+<meta property="og:image" content="https://enlabs.com.br/toolz/img/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="/assets/css/enlabs.css?v=2">
+<link rel="stylesheet" href="/toolz/toolz.css?v=4">
+<script src="/toolz/vendas.js?v=1"></script>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0B0A10">
+</head>
+<body>
+
+<nav class="ec-nav">
+  <a class="ec-nav-logo" href="/" aria-label="enlabs"><span class="ec-wm">enlabs<i></i></span></a>
+  <span class="tz-nav-product">toolz / IA Render Lab</span>
+  <div class="ec-nav-links" data-nav-links>
+    <a href="#wirecolor">Wirecolor</a>
+    <a href="#resultados">Resultados</a>
+    <a href="#360">360°</a>
+    <a href="#planos">Planos</a>
+    <a href="#duvidas">Dúvidas</a>
+    <a class="tz-nav-mobile-only so-abertas" href="/conta">Entrar</a>
+  </div>
+  <button class="ec-nav-toggle" type="button" data-nav-toggle aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="tz-nav-cta">
+  <a class="tz-nav-login so-abertas" href="/conta">Entrar</a>
+  <a class="ec-btn" href="/planos">Ver planos</a>
+</div>
+
+<main>
+
+  <!-- hero -->
+  <section class="tz-wrap tz-hero">
+    <div class="tz-hero-text">
+      <span class="ec-idx">/ IA Render Lab — plugin para SketchUp</span>
+      <h1 class="tz-hero-title">A IA dá a luz.<br><span>A forma continua sua.</span></h1>
+      <p class="tz-lede">O IA Render Lab transforma a vista do seu SketchUp em imagem realista em cerca de 30 segundos. Forma, câmera e materiais seguem o modelo. E o render já sai alinhado com o wirecolor, pronto para o Photoshop.</p>
+      <div class="tz-hero-actions">
+        <a class="ec-btn ec-btn--primary" href="#beta" data-form>Testar grátis</a>
+        <a class="ec-btn" href="#como-funciona">Ver funcionamento</a>
+      </div>
+      <span class="tz-hero-note">Beta aberto · 10 moedas para quem responder a pesquisa · SketchUp 2025+ · Windows</span>
+    </div>
+
+    <figure class="tz-reveal" style="margin:0">
+      <div class="tz-compare" data-compare style="--pos:50%">
+        <img src="img/varanda-render.jpg" alt="Render do IA Render Lab: varanda com parede de cobogós, mesa alta e banquetas de madeira ao pôr do sol" width="928" height="1152">
+        <img class="tz-compare-top" src="img/varanda-vista.jpg" alt="A mesma varanda na vista original do SketchUp" width="928" height="1152">
+        <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista do SketchUp e render">
+        <span class="tz-compare-bar" aria-hidden="true"></span>
+        <span class="tz-compare-tag tz-compare-tag--l">Vista SketchUp</span>
+        <span class="tz-compare-tag tz-compare-tag--r">Render IA</span>
+      </div>
+      <figcaption class="tz-compare-foot tz-log">varanda · exterior · pôr do sol · 1K · 4:5 · sem prompt · <b>●</b> alinhado</figcaption>
+    </figure>
+  </section>
+
+  <!-- problema -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 01 — O problema</span>
+      <h2 class="ec-title">As IAs de imagem redesenham o seu projeto.</h2>
+      <p class="tz-lede">Fica bonito. Mas não é o projeto que você mostrou ao cliente.</p>
+    </div>
+    <div class="tz-pains">
+      <article class="tz-pain tz-reveal">
+        <span class="ec-label">/ forma</span>
+        <h3>A forma escorrega.</h3>
+        <p>A parede muda de lugar, a janela cresce, a escada ganha um degrau. A imagem já não confere com a planta.</p>
+      </article>
+      <article class="tz-pain tz-reveal">
+        <span class="ec-label">/ matéria</span>
+        <h3>O material vira outro.</h3>
+        <p>O carvalho vira nogueira, o branco vira bege, a bancada ganha veios que ninguém especificou.</p>
+      </article>
+      <article class="tz-pain tz-reveal">
+        <span class="ec-label">/ pós-produção</span>
+        <h3>A máscara não encaixa.</h3>
+        <p>O render não bate com o wirecolor. Selecionar um material no Photoshop vira recorte à mão.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- wirecolor -->
+  <section class="tz-section tz-wrap" id="wirecolor">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 02 — O diferencial</span>
+      <h2 class="ec-title">Encaixa no seu wirecolor.</h2>
+      <p class="tz-lede">Cada render é alinhado automaticamente com a vista crua do SketchUp, no tamanho exato do wirecolor. Sobrepôs no Photoshop, selecionou com a varinha mágica, pronto.</p>
+    </div>
+
+    <div class="tz-wire" data-wire>
+      <figure class="tz-reveal">
+        <div class="tz-wire-frame"><img src="img/varanda-vista.jpg" alt="Vista do SketchUp da varanda" loading="lazy" width="928" height="1152"></div>
+        <figcaption class="ec-label">01 · Vista do SketchUp</figcaption>
+      </figure>
+      <figure class="tz-reveal">
+        <div class="tz-wire-frame"><img src="img/varanda-wirecolor.png" alt="Wirecolor por material: cada material numa cor chapada" loading="lazy" width="928" height="1152"></div>
+        <figcaption class="ec-label">02 · Wirecolor por material</figcaption>
+      </figure>
+      <figure class="tz-reveal">
+        <div class="tz-wire-frame">
+          <img src="img/varanda-render.jpg" alt="Render alinhado com o wirecolor" loading="lazy" width="928" height="1152">
+          <img class="tz-wire-overlay" src="img/varanda-wirecolor.png" alt="" aria-hidden="true" loading="lazy">
+        </div>
+        <figcaption class="ec-label">03 · Render alinhado</figcaption>
+      </figure>
+    </div>
+    <div class="tz-wire-bar">
+      <button class="ec-btn" type="button" data-wire-toggle aria-pressed="false">Sobrepor wirecolor</button>
+      <span class="tz-log">ajuste global + 8×8 regiões · &lt; 1 s · no seu computador · <b>●</b> alinhado</span>
+    </div>
+
+    <div class="tz-proof">
+      <div class="tz-reveal"><strong>1:1</strong><span>mesmo tamanho e enquadramento do wirecolor, para sobrepor direto no Photoshop.</span></div>
+      <div class="tz-reveal"><strong>2</strong><span>wirecolors em cada render: por material e por tag.</span></div>
+      <div class="tz-reveal"><strong>&lt; 1 s</strong><span>para alinhar, no seu computador, sem custo extra.</span></div>
+    </div>
+  </section>
+
+  <!-- resultados -->
+  <section class="tz-section tz-wrap" id="resultados">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 03 — Resultados</span>
+      <h2 class="ec-title">Do SketchUp ao render.</h2>
+      <p class="tz-lede">Renders reais do IA Render Lab, todos sem escrever prompt. Arraste a linha para comparar com a vista original.</p>
+    </div>
+    <div class="tz-gallery">
+      <figure class="tz-reveal">
+        <div class="tz-compare" data-compare style="--pos:50%;aspect-ratio:1376/768">
+          <img src="img/fachada-tarde-render.jpg" alt="Render da fachada posterior com deck e gramado ao pôr do sol" loading="lazy">
+          <img class="tz-compare-top" src="img/fachada-tarde-vista.jpg" alt="Vista do SketchUp da fachada posterior" loading="lazy">
+          <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista e render">
+          <span class="tz-compare-bar" aria-hidden="true"></span>
+        </div>
+        <figcaption class="tz-log">exterior · pôr do sol · 1K · 16:9 · sem prompt</figcaption>
+      </figure>
+      <figure class="tz-reveal">
+        <div class="tz-compare" data-compare style="--pos:50%;aspect-ratio:1376/768">
+          <img src="img/fachada-noite-render.jpg" alt="Render da mesma fachada à noite, com as janelas acesas" loading="lazy">
+          <img class="tz-compare-top" src="img/fachada-noite-vista.jpg" alt="Vista do SketchUp da fachada posterior" loading="lazy">
+          <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista e render">
+          <span class="tz-compare-bar" aria-hidden="true"></span>
+        </div>
+        <figcaption class="tz-log">mesma vista, outra atmosfera · noite · 1K · 16:9</figcaption>
+      </figure>
+      <figure class="tz-reveal">
+        <div class="tz-compare" data-compare style="--pos:50%;aspect-ratio:1376/768">
+          <img src="img/fachada-perspectiva-render.jpg" alt="Render da casa em perspectiva com deck e banheira externa ao entardecer" loading="lazy">
+          <img class="tz-compare-top" src="img/fachada-perspectiva-vista.jpg" alt="Vista do SketchUp da casa em perspectiva" loading="lazy">
+          <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista e render">
+          <span class="tz-compare-bar" aria-hidden="true"></span>
+        </div>
+        <figcaption class="tz-log">exterior · pôr do sol · cenas em lote · 1K · 16:9</figcaption>
+      </figure>
+      <figure class="tz-reveal">
+        <div class="tz-compare" data-compare style="--pos:50%;aspect-ratio:1376/768">
+          <img src="img/estar-lareira-render.jpg" alt="Render de sala com lareira, poltronas de couro e mesa de madeira" loading="lazy" style="object-position:50% 60%">
+          <img class="tz-compare-top" src="img/estar-lareira-vista.jpg" alt="Vista do SketchUp da sala com lareira" loading="lazy" style="object-position:50% 60%">
+          <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista e render">
+          <span class="tz-compare-bar" aria-hidden="true"></span>
+        </div>
+        <figcaption class="tz-log">interior · minimalista · 1K · sem prompt · <b>●</b> alinhado</figcaption>
+      </figure>
+      <figure class="tz-reveal tz-gallery-wide">
+        <div class="tz-compare" data-compare style="--pos:50%;aspect-ratio:1584/672">
+          <img src="img/estar-amplo-render.jpg" alt="Render de estar amplo com forro e paredes em madeira, sofás de couro e janelas grandes" loading="lazy">
+          <img class="tz-compare-top" src="img/estar-amplo-vista.jpg" alt="Vista do SketchUp do estar amplo" loading="lazy">
+          <input class="tz-compare-range" type="range" min="0" max="100" value="50" aria-label="Comparar vista e render">
+          <span class="tz-compare-bar" aria-hidden="true"></span>
+        </div>
+        <figcaption class="tz-log">interior · minimalista · 1K · 21:9 · sem prompt · <b>●</b> alinhado</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 360 -->
+  <section class="tz-section tz-wrap" id="360">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 04 — Render 360°</span>
+      <h2 class="ec-title">Entre no projeto.</h2>
+      <p class="tz-lede">A panorâmica sai do olho da câmera do SketchUp e a IA renderiza o ambiente inteiro, pelo custo de uma imagem. Arraste para olhar em volta; arraste a linha para comparar com o modelo.</p>
+    </div>
+    <div class="tz-pano-tabs" role="tablist" data-pano-tabs>
+      <button type="button" role="tab" aria-selected="true" class="is-on" data-a="img/pano-lareira-vista.jpg" data-b="img/pano-lareira-render.jpg" data-log="estar com lareira · 360° · 4K · 2:1 · sem prompt">Estar · 4K</button>
+      <button type="button" role="tab" aria-selected="false" data-a="img/pano-estar-vista.jpg" data-b="img/pano-estar-render.jpg" data-log="estar · 360° · 1K · 2:1 · sem prompt">Estar · 1K</button>
+    </div>
+    <div class="tz-pano tz-reveal" data-pano data-a="img/pano-lareira-vista.jpg" data-b="img/pano-lareira-render.jpg" data-fallback="img/pano-lareira-render.jpg" data-yaw="0"></div>
+    <div class="tz-pano-foot">
+      <span class="tz-log" data-pano-log>estar com lareira · 360° · 4K · 2:1 · sem prompt</span>
+      <span class="tz-log">arrastar · girar &nbsp;·&nbsp; roda ou pinça · zoom &nbsp;·&nbsp; setas · teclado</span>
+    </div>
+  </section>
+
+  <!-- como funciona -->
+  <section class="tz-section tz-wrap" id="como-funciona">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 05 — Como funciona</span>
+      <h2 class="ec-title">Três passos. Nenhum prompt.</h2>
+      <p class="tz-lede">Sem exportar, sem trocar de programa. Tudo acontece dentro do SketchUp.</p>
+    </div>
+    <div class="tz-steps">
+      <div class="tz-step tz-reveal">
+        <span class="ec-idx">01</span>
+        <h3>Enquadre no SketchUp.</h3>
+        <p>Use a sua câmera ou a janela Câmera do plugin: lentes em mm, verticais endireitadas, formatos 16:9 e 4:5.</p>
+      </div>
+      <div class="tz-step tz-reveal">
+        <span class="ec-idx">02</span>
+        <h3>Escolha a atmosfera.</h3>
+        <p>Tipo de cena, atmosfera e resolução. O plugin monta o pedido para a IA. O campo de texto é opcional.</p>
+      </div>
+      <div class="tz-step tz-reveal">
+        <span class="ec-idx">03</span>
+        <h3>Gere e compare.</h3>
+        <p>Em cerca de 30 segundos o render chega ao frame buffer: antes e depois, wirecolor, salvar e copiar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- recursos -->
+  <section class="tz-section tz-wrap" id="recursos">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 06 — Recursos</span>
+      <h2 class="ec-title">Tudo na mesma barra.</h2>
+    </div>
+    <div class="tz-features">
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ lote</span>
+        <h3>Cenas em lote</h3>
+        <p>Marque as cenas e gere todas de uma vez. Cada uma com a sua câmera e o seu estilo.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ 360°</span>
+        <h3>Render 360°</h3>
+        <p>Panorâmica 2:1 a partir do olho da câmera, já marcada como foto 360°. Custa o mesmo que uma imagem.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ planta</span>
+        <h3>Planta humanizada</h3>
+        <p>Cria as cenas de planta com altura de corte e estilo, em projeção paralela, e humaniza com a IA.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ textura</span>
+        <h3>Textura IA</h3>
+        <p>De uma foto para uma textura seamless, no tamanho real em cm. Vai direto para o balde de tinta.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ câmera</span>
+        <h3>Câmera</h3>
+        <p>Lentes de 14 a 85 mm, altura do olho, verticais endireitadas e guias de composição.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ espelho</span>
+        <h3>Reflexo em espelhos</h3>
+        <p>Selecione a face do espelho: ela recebe exatamente o que reflete, recalculado a cada render.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ frame buffer</span>
+        <h3>Frame buffer</h3>
+        <p>Antes e depois, render ou wirecolor, zoom, salvar, copiar e abrir a pasta.</p>
+      </article>
+      <article class="tz-feature tz-reveal">
+        <span class="ec-label">/ presets</span>
+        <h3>Presets do estúdio</h3>
+        <p>Salve as suas receitas de render e repita o mesmo look em todos os projetos.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- comparativo -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 07 — Comparativo</span>
+      <h2 class="ec-title">Onde o IA Render Lab entra.</h2>
+    </div>
+    <div class="tz-table-scroll tz-reveal">
+      <table class="tz-table">
+        <thead>
+          <tr><th></th><th>Render tradicional</th><th>IAs de imagem</th><th class="is-us">IA Render Lab</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Tempo por imagem</th><td>Horas de configuração e máquina</td><td>Segundos</td><td class="is-us">Cerca de 30 segundos</td></tr>
+          <tr><th>Respeita forma e materiais</th><td>Sim</td><td>Não garantem</td><td class="is-us">Sim, travados no pedido</td></tr>
+          <tr><th>Alinha com o wirecolor</th><td>Sim</td><td>Não</td><td class="is-us">Sim, automático</td></tr>
+          <tr><th>Placa de vídeo forte</th><td>Precisa</td><td>Não precisa</td><td class="is-us">Não precisa</td></tr>
+          <tr><th>Dentro do SketchUp</th><td>Depende do motor</td><td>Quase sempre não</td><td class="is-us">Sim</td></tr>
+          <tr><th>Escrever prompt</th><td>Não</td><td>Sim</td><td class="is-us">Opcional</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- moedas -->
+  <section class="tz-section tz-wrap" id="moedas">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 08 — Moedas</span>
+      <h2 class="ec-title">Você paga por imagem gerada.</h2>
+      <p class="tz-lede">Sem licença anual, sem placa de vídeo. Cada imagem custa moedas conforme a resolução.</p>
+    </div>
+    <div class="tz-coins">
+      <div class="tz-coin tz-reveal"><span class="ec-label">1K</span><strong>1 moeda</strong><span>Estudos, aprovação rápida, WhatsApp.</span></div>
+      <div class="tz-coin tz-reveal"><span class="ec-label">2K</span><strong>2 moedas</strong><span>Apresentação ao cliente.</span></div>
+      <div class="tz-coin tz-reveal"><span class="ec-label">4K</span><strong>4 moedas</strong><span>Prancha e impressão.</span></div>
+    </div>
+    <div class="tz-coin-notes">
+      <p><b>Moedas do plano.</b> Entram a cada cobrança mensal aprovada. Na renovação, a sobra do mês zera.</p>
+      <p><b>Moedas avulsas.</b> <span data-coin-price>Preço por moeda</span> cada, com Pix ou cartão. Não expiram e somam com as do plano.</p>
+      <p><b>Modo demonstração.</b> Teste todo o fluxo do plugin sem internet e sem gastar moedas.</p>
+    </div>
+  </section>
+
+  <!-- planos -->
+  <section class="tz-section tz-wrap" id="planos">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 09 — Planos</span>
+      <h2 class="ec-title">Plano mensal ou moedas avulsas.</h2>
+      <p class="tz-lede">O plano renova todo mês no cartão. As avulsas você compra quando precisar, com Pix ou cartão, e elas não expiram.</p>
+    </div>
+    <div class="tz-plans" data-plans-monthly>
+      <p class="tz-plans-loading tz-log">carregando preços…</p>
+    </div>
+    <p class="tz-plans-foot tz-log">pagamento processado pelo Mercado Pago · 1 computador por conta · <a href="/planos">ver detalhes dos planos</a><span class="so-abertas"> · <b>●</b> já tem conta? <a href="/conta">entrar</a></span></p>
+  </section>
+
+  <!-- beta -->
+  <section class="tz-section tz-wrap" id="beta">
+    <div class="tz-beta tz-reveal">
+      <div class="tz-section-head" style="margin:0">
+        <span class="ec-idx">/ 10 — Beta aberto</span>
+        <h2 class="ec-title">Responda 5 minutos. Ganhe 10 moedas.</h2>
+        <p class="tz-lede">Estamos abrindo o IA Render Lab para um grupo de arquitetos, designers e renderistas. Conte como você faz imagens hoje e receba 10 moedas para testar: 10 imagens em 1K ou 5 em 2K.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <ol>
+          <li><span class="ec-label">01</span>Responda a pesquisa (5 minutos).</li>
+          <li><span class="ec-label">02</span>Receba o acesso por e-mail em até 2 dias úteis.</li>
+          <li><span class="ec-label">03</span>Instale pelo Extension Manager e gere.</li>
+        </ol>
+        <a class="ec-btn ec-btn--primary" href="#beta" data-form>Entrar no beta</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- dúvidas -->
+  <section class="tz-section tz-wrap" id="duvidas">
+    <div class="tz-section-head tz-reveal">
+      <span class="ec-idx">/ 11 — Dúvidas</span>
+      <h2 class="ec-title">Antes de testar.</h2>
+    </div>
+    <div class="tz-faq tz-reveal">
+      <details>
+        <summary>Em quais versões funciona?</summary>
+        <p>SketchUp 2025 ou mais novo, no Windows. Para gerar é preciso internet; o modo demonstração funciona sem conexão.</p>
+      </details>
+      <details>
+        <summary>O meu projeto fica exposto?</summary>
+        <p>Só a imagem da vista sai do seu computador: ela vai pelo servidor da enlabs até o modelo de IA do Google (Gemini) para gerar o render. O arquivo .skp não é enviado. Você lê e aceita o aviso de privacidade antes do primeiro envio.</p>
+      </details>
+      <details>
+        <summary>Preciso escrever prompt?</summary>
+        <p>Não. Tipo de cena, atmosfera e ambientação já montam o pedido. O campo de texto existe para ajustes finos, como "fim de tarde" ou "piso mais claro".</p>
+      </details>
+      <details>
+        <summary>A IA pode mudar o meu projeto?</summary>
+        <p>O pedido trava forma, câmera e materiais e libera só o realismo: luz, reflexo, textura fina. Se um render sair diferente demais da vista, o plugin avisa em vez de forçar o alinhamento.</p>
+      </details>
+      <details>
+        <summary>Quanto tempo leva cada imagem?</summary>
+        <p>Uma imagem 1K leva de 20 a 40 segundos. No lote, as cenas são geradas uma depois da outra e chegam ao frame buffer conforme ficam prontas.</p>
+      </details>
+      <details>
+        <summary>Funciona em mais de um computador?</summary>
+        <p>Cada conta funciona em um computador: o plugin liga a conta à máquina no primeiro render. Para trocar de computador, a transferência pode ser feita uma vez a cada 30 dias.</p>
+      </details>
+      <details>
+        <summary>Como funciona o pagamento?</summary>
+        <p>O pagamento é processado pelo Mercado Pago. O plano mensal é cobrado no cartão todo mês, e as moedas entram a cada cobrança aprovada. As moedas avulsas podem ser pagas com Pix ou cartão.</p>
+      </details>
+      <details>
+        <summary>Posso cancelar ou trocar de plano?</summary>
+        <p>Sim, sem multa. Ao cancelar, o plano não renova mais e as moedas do mês continuam valendo até o fim do ciclo. Para trocar de plano, cancele o atual e assine o novo.</p>
+      </details>
+      <details>
+        <summary>As moedas expiram?</summary>
+        <p>As avulsas não expiram. As do plano valem até a próxima renovação; na renovação, a sobra do mês zera e entram as moedas novas.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- final -->
+  <section class="tz-section tz-wrap">
+    <div class="tz-final tz-reveal">
+      <span class="ec-idx">/ IA Render Lab</span>
+      <h2 class="ec-title">Do SketchUp à luz<br>em 30 segundos.</h2>
+      <a class="ec-btn ec-btn--primary" href="#beta" data-form>Testar grátis</a>
+      <div class="tz-socials">
+        <a href="https://instagram.com/enlabs.studio" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/5514998564066" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href="mailto:arqevandrocolombo@gmail.com">E-mail</a>
+        <a href="/">Estúdio enlabs</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ec-footer">
+  <span class="ec-hlockup"><span class="ec-wm">enlabs<i></i></span><span class="ec-hlockup-ds">architectural visualization lab</span></span>
+  <span class="tz-log"><a href="/planos">planos</a> · <a href="/termos">termos e privacidade</a> · toolz / IA Render Lab</span>
+</footer>
+
+<script src="/toolz/pano.js?v=1"></script>
+<script src="/toolz/planos-ui.js?v=1"></script>
+<script>
+(function(){
+  // Link do formulário da pesquisa (01_PESQUISA_BETA). Enquanto vazio, os botões levam para a seção #beta.
+  var FORM_URL = '';
+  if (FORM_URL) {
+    document.querySelectorAll('[data-form]').forEach(function(a){
+      a.href = FORM_URL; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    });
+  }
+
+  // antes / depois
+  document.querySelectorAll('[data-compare]').forEach(function(box){
+    var range = box.querySelector('input');
+    range.addEventListener('input', function(){ box.style.setProperty('--pos', range.value + '%'); });
+  });
+
+  // 360°: abas trocam a panorâmica
+  var panoEl = document.querySelector('[data-pano]');
+  document.querySelectorAll('[data-pano-tabs] button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (btn.classList.contains('is-on') || !panoEl._pano) return;
+      document.querySelectorAll('[data-pano-tabs] button').forEach(function(b){
+        b.classList.toggle('is-on', b === btn); b.setAttribute('aria-selected', b === btn);
+      });
+      panoEl._pano = panoEl._pano.setSources(btn.getAttribute('data-a'), btn.getAttribute('data-b'));
+      document.querySelector('[data-pano-log]').textContent = btn.getAttribute('data-log');
+    });
+  });
+
+  // sobrepor wirecolor no render alinhado
+  var wire = document.querySelector('[data-wire]');
+  var wireBtn = document.querySelector('[data-wire-toggle]');
+  wireBtn.addEventListener('click', function(){
+    var on = wire.classList.toggle('is-overlay');
+    wireBtn.setAttribute('aria-pressed', on);
+    wireBtn.textContent = on ? 'Tirar wirecolor' : 'Sobrepor wirecolor';
+  });
+
+  // menu mobile
+  var navToggle = document.querySelector('[data-nav-toggle]');
+  var navLinks  = document.querySelector('[data-nav-links]');
+  function setMenu(open){
+    navToggle.classList.toggle('is-open', open);
+    navLinks.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', open);
+    navToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+  }
+  navToggle.addEventListener('click', function(){ setMenu(!navLinks.classList.contains('is-open')); });
+  navLinks.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+
+  // entrada suave
+  var items = document.querySelectorAll('.tz-reveal');
+  if (!('IntersectionObserver' in window)) { items.forEach(function(el){ el.classList.add('is-in'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  items.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
